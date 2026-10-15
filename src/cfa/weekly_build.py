@@ -1,7 +1,7 @@
 """Sunday deterministic build: candidate screen, fact sheets, news rollup, scorecard, readiness flag.
 
-Writes weekly/YYYY-Www/{factsheets.md, candidates.csv, news_rollup.md, inputs.json}. The weekly-digest skill
-reads only these files plus journal/scorecard_summary.md and recent reflections.
+Writes weekly/YYYY-Www/{factsheets.md, candidates.csv, news_rollup.md, themes.md, theme_scan.md, inputs.json}.
+The weekly-digest skill reads only these files plus journal/scorecard_summary.md and recent reflections.
 
     python -m cfa.weekly_build [--date 2026-10-18]
 """
@@ -15,7 +15,7 @@ import json
 import numpy as np
 import pandas as pd
 
-from . import backtest, portfolio, scorecard, signals
+from . import backtest, portfolio, scorecard, signals, themes
 from .collect_funds import snapshot_path, update_history
 from .collect_news import load_day
 from .common import (CONFIG, HISTORY, NEWS, PORTFOLIO, RAW, REF, WEEKLY, guess_type, iso_week_label, last_trading_day,
@@ -234,6 +234,47 @@ def signal_layer(asof: dt.date, week: str, holdings: list[dict], hold_rows: list
     return out
 
 
+def watch_theme_rows(watched: list[dict], theme_prod: dict, products: pd.DataFrame, etf_snaps, sigs, held: set[str],
+                     sunday: dt.date, asof: dt.date) -> list[dict]:
+    """One row per watched theme with stage statistics and its curated product list (one per index family)."""
+    curate = {t["id"] for t in themes.active(watched)}
+    rows = []
+    for t in watched:
+        prods = []
+        for r in theme_prod[t["id"]].to_dict("records"):
+            f = facts(r["code"], r["kind"], etf_snaps)
+            s = sigs(r["code"])
+            prods.append({"code": r["code"], "name": r["name"], "kind": r["kind"], "family": r["family"],
+                          "issuers": int(r["issuers"]), "turnover_cny_m": round(float(r["turnover_cny"]) / 1e6, 1),
+                          "inception": r["inception"] if pd.notna(r.get("inception")) else None,
+                          **{k: f.get(k) for k in ("r_4w", "r_12w", "off_52w_high", "max_dd_52w")},
+                          **{k: s.get(k) for k in ("composite", "crowded", "cluster", "above_ma200")},
+                          "held": r["code"] in held})
+        news_this, news_avg = themes.news_counts(t, sunday, load_day)
+        rows.append({"id": t["id"], "name": t.get("name"), "status": t.get("status"), "stage": t.get("stage"),
+                     "curate": t["id"] in curate, "review_by": str(t.get("review_by")),
+                     "news_this_week": news_this, "news_4w_avg": news_avg, **themes.theme_stats(t, products, asof),
+                     "crowded_products": sum(bool(p.get("crowded")) for p in prods), "products": prods})
+    return rows
+
+
+def themes_markdown(rows: list[dict], week: str, asof: dt.date) -> str:
+    md = [f"# Theme watchlist {week} (data as of {asof})", "",
+          "Themes come from watchlist/themes.yaml (theme-scout skill). Products: every onshore ETF/LOF whose name "
+          "matches, one per index family (the most liquid issuer), turnover at least watch_themes.min_turnover_cny. "
+          "issuers = products tracking that family. launched_6m/12m count new listings across the whole theme: a "
+          "launch wave is a crowding warning. curate = True means the Sunday digest must cover at least "
+          "picks_per_theme products.", ""]
+    if not rows:
+        return "\n".join(md + ["_watchlist is empty_", ""])
+    stats = [{k: v for k, v in r.items() if k != "products"} for r in rows]
+    md += ["## Overview", "", md_table(pd.DataFrame(stats)), ""]
+    for r in rows:
+        md += [f"## {r['id']}: {r['name']} ({r['status']}, {r['stage']})", "",
+               md_table(pd.DataFrame(r["products"])) if r["products"] else "_no liquid products_", ""]
+    return "\n".join(md)
+
+
 SIG_COLS = ["composite", "crowded", "cluster", "trend_12w_rank", "trend_26w_rank", "above_ma200", "vol60_pct"]
 
 
@@ -254,6 +295,12 @@ def main() -> int:
     cands = screen(asof, held)
     if not cands.empty:
         hist |= update_history({c: k for c, k in zip(cands["code"], cands["kind"])})
+    products = themes.exchange_products(asof)
+    watched = [t for t in themes.load_watchlist() if t.get("status") != "retired"]
+    theme_prod = {t["id"]: themes.theme_products(t, products) for t in watched}
+    theme_codes = {c: k for df in theme_prod.values() if not df.empty for c, k in zip(df["code"], df["kind"])}
+    if theme_codes:
+        hist |= update_history(theme_codes)
     etf_snaps = latest_snapshot("etf", asof, n=6)
 
     hold_rows = []
@@ -270,7 +317,8 @@ def main() -> int:
     if missing_hist:
         ready = False
 
-    layer = signal_layer(asof, week, holdings, hold_rows, list(cands.get("code", [])), etf_snaps, ready)
+    layer = signal_layer(asof, week, holdings, hold_rows, list(cands.get("code", [])) + list(theme_codes), etf_snaps,
+                         ready)
     sig = layer["signals"]
 
     def sigs(code: str) -> dict:
@@ -298,6 +346,10 @@ def main() -> int:
                                                                          "off_52w_high", "premium_pct", "shares_chg_5d_pct")},
                                **{k: sigs(f["code"]).get(k) for k in ("composite", "crowded", "cluster")}})
     rule_rows = [c | {k: sigs(c["code"]).get(k) for k in ("composite", "crowded", "cluster")} for c in layer["calls"]]
+    watch_rows = watch_theme_rows(watched, theme_prod, products, etf_snaps, sigs, held, sunday, asof)
+    (out_dir / "themes.md").write_text(themes_markdown(watch_rows, week, asof), encoding="utf-8")
+    (out_dir / "theme_scan.md").write_text(themes.scan_markdown(themes.scan(products, asof, watched), asof),
+                                           encoding="utf-8")
 
     rollup_md, rollup_meta = news_rollup(sunday)
     (out_dir / "news_rollup.md").write_text(rollup_md, encoding="utf-8")
@@ -326,10 +378,15 @@ def main() -> int:
           f"Target weights: core {tg.get('core')}, satellite {tg.get('satellite')}, unallocated "
           f"{tg.get('unallocated_pct')}%. {' '.join(tg.get('notes') or [])}", "", tbl(rule_rows), "",
           "## Candidates (pre-screened, not held)", "", tbl(cand_rows), "",
-          "## Theme ETFs", "", tbl(theme_rows), ""]
+          "## Theme ETFs", "", tbl(theme_rows), "",
+          "## Base rates for p_up", "",
+          "How often a fund in each composite band beat the CSI 300 over the next 4 weeks in the backtest. Start "
+          "each call's p_up here. Watchlist themes and their products: themes.md.", "",
+          tbl(health.get("base_rates") or []), ""]
     (out_dir / "factsheets.md").write_text("\n".join(md), encoding="utf-8")
     inputs = {"week": week, "sunday": str(sunday), "asof": str(asof), "ready": ready, "holdings": hold_rows,
-              "candidates": cand_rows, "themes": theme_rows, "regime": reg, "portfolio": tg, "rule_calls": rule_rows,
+              "candidates": cand_rows, "themes": theme_rows, "watch_themes": watch_rows,
+              "base_rates": health.get("base_rates") or [], "regime": reg, "portfolio": tg, "rule_calls": rule_rows,
               "signal_health": {"weight_mult": health.get("weight_mult"), "status": statuses},
               "scorecard": score, "news": rollup_meta,
               "risk_rules": load_yaml(CONFIG / "risk_rules.yaml"), "target": load_yaml(CONFIG / "target.yaml")}

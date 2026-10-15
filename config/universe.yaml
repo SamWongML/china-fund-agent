@@ -62,3 +62,21 @@ portfolio:
   satellite_slots: 3
   satellite_min_composite: 60
   drift_band_pct: 5
+
+# Probability on every call: journal `p_up` = chance the fund beats the primary benchmark over the call's horizon.
+# The journal derives `confidence` from it and rejects values outside these caps (LLM percentages run hot; see
+# research/theme_watchlist in the project files).
+advice:
+  p_min: 0.15
+  p_max: 0.85
+
+# Theme watchlist (watchlist/themes.yaml, written by the theme-scout skill). The weekly build finds products for
+# each theme by name keyword, keeps one per index family (the most liquid issuer), and the Sunday advisor
+# curates at least picks_per_theme of them per active theme.
+watch_themes:
+  min_turnover_cny: 20000000      # 2,000万 daily turnover
+  max_products: 6
+  picks_per_theme: 3
+  max_active: 8
+  exclude_name_keywords: [港, 恒生, 纳斯达克, 纳指, 标普, 道琼斯, 日经, 德国, 法国, 中韩, 沙特, 越南, 印度, 亚太, 债, 货币,
+                          日利, 添益, 短融]

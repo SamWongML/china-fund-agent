@@ -62,6 +62,40 @@ def _spread(feat: pd.DataFrame, fwd: pd.DataFrame, dates, min_n: int, cost: floa
     return (float(np.mean(vals)) if vals else None), len(vals)
 
 
+BANDS = [0, 20, 40, 60, 80, 100.001]
+
+
+def composite_base_rates(f: dict, fwd: pd.DataFrame, dates, mult: dict, min_n: int,
+                         bench: str = "sh000300") -> list[dict]:
+    """How often a fund beat the benchmark over the next 4 weeks, by its composite band at the time.
+
+    The reference class the advisor starts its p_up from. Weights come from this same backtest, so the
+    spread between bands is slightly optimistic."""
+    idx = signals._index(bench)
+    w = {k: v * mult.get(k, 1.0) for k, v in signals.weights().items() if k in f}
+    w = {k: v for k, v in w.items() if v > 0}
+    if idx is None or not w:
+        return []
+    ranks = {k: f[k].rank(axis=1, pct=True) * 100 for k in w}
+    num = sum(ranks[k].fillna(0) * v for k, v in w.items())
+    den = sum(ranks[k].notna() * v for k, v in w.items())
+    comp = (num / den.replace(0, np.nan)).loc[dates]
+    comp = comp[comp.notna().sum(axis=1) >= min_n]
+    idx_fwd = (idx.shift(-20) / idx - 1).reindex(comp.index)
+    excess = fwd.loc[comp.index].sub(idx_fwd, axis=0)
+    long = pd.DataFrame({"composite": comp.stack(), "excess": excess.stack()}).dropna()
+    if long.empty:
+        return []
+    long["band"] = pd.cut(long["composite"], BANDS, right=False,
+                          labels=[f"{a}-{min(b, 100):g}" for a, b in zip(BANDS[:-1], BANDS[1:])])
+    rows = []
+    for band, g in [("all", long)] + list(long.groupby("band", observed=True)):
+        rows.append({"composite_band": str(band), "fund_weeks": int(len(g)),
+                     "beat_csi300_pct": round(float((g["excess"] > 0).mean() * 100), 1),
+                     "avg_excess_4w_pct": round(float(g["excess"].mean() * 100), 2)})
+    return rows
+
+
 def run(codes: list[str] | None = None) -> dict:
     cfg = signals.cfg().get("backtest") or {}
     min_n = int(cfg.get("min_funds", 8))
@@ -121,10 +155,11 @@ def run(codes: list[str] | None = None) -> dict:
         for lab, m in (("breadth_above_half", b[ok] > 0.5), ("breadth_below_half", b[ok] <= 0.5)):
             regime_check[lab] = {"weeks": int(m.sum()),
                                  "csi300_next_4w_pct": round(float(fwd_idx[ok][m].mean() * 100), 2) if m.any() else None}
+    base_rates = composite_base_rates(f, fwd4, weeks[:-4], mult, min_n)
     result = {"ok": True, "funds": int(p.shape[1]), "first_week": str(weeks[0].date()) if len(weeks) else None,
               "last_week": str(weeks[-1].date()) if len(weeks) else None,
               "live": sorted(k for k, v in mult.items() if v > 0), "weight_mult": mult, "signals": rows,
-              "regime_check": regime_check}
+              "regime_check": regime_check, "base_rates": base_rates}
     write(result)
     return result
 
@@ -146,6 +181,11 @@ def write(res: dict) -> None:
     if res.get("regime_check"):
         lines += ["## Regime check (CSI 300, next 4 weeks)", "",
                   md_table(pd.DataFrame([{"state": k, **v} for k, v in res["regime_check"].items()])), ""]
+    if res.get("base_rates"):
+        lines += ["## Base rates for p_up (next 4 weeks vs CSI 300, by composite band)", "",
+                  "Start a call's p_up from its band's beat rate, then adjust for named reasons. Weights were "
+                  "fitted on the same history, so the gap between bands is a little optimistic.", "",
+                  md_table(pd.DataFrame(res["base_rates"])), ""]
     (JOURNAL / "signal_health.md").write_text("\n".join(lines), encoding="utf-8")
 
 

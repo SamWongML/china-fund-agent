@@ -39,7 +39,8 @@ def first_after(s: pd.Series, when: pd.Timestamp, strict: bool) -> tuple[pd.Time
 
 
 def grade(rec: dict, bench: pd.Series | None) -> dict:
-    out = {k: rec.get(k) for k in ("id", "week", "code", "action", "confidence", "horizon_weeks", "held")}
+    out = {k: rec.get(k) for k in ("id", "week", "code", "action", "confidence", "p_up", "view", "theme",
+                                   "horizon_weeks", "held")}
     out["override"] = bool(rec.get("override"))
     prices = load_prices(rec["code"])
     decided = pd.Timestamp(rec["ts"][:10])
@@ -62,7 +63,8 @@ def grade(rec: dict, bench: pd.Series | None) -> dict:
         hit = excess > 0 if rec["action"] in UP_ACTIONS else excess < 0
     return out | {"status": status, "entry_date": e_date.date(), "exit_date": x_date.date(), "ret_pct": round(ret, 2),
                   "bench_ret_pct": round(b_ret, 2) if b_ret is not None else None,
-                  "excess_pct": round(excess, 2) if excess is not None else None, "hit": hit}
+                  "excess_pct": round(excess, 2) if excess is not None else None, "hit": hit,
+                  "beat": (excess > 0) if status == "closed" and excess is not None else None}
 
 
 def portfolio_month(bench: pd.Series | None, target_monthly: float) -> dict:
@@ -105,11 +107,15 @@ def main() -> dict:
     if len(closed):
         ok = closed["hit"].notna()
         brier = round(float(((closed.loc[ok, "confidence"].astype(float) - closed.loc[ok, "hit"].astype(float)) ** 2).mean()), 3)
+    # Same for p_up (probability of beating the benchmark), on every call that carries one.
+    with_p = closed[closed["p_up"].notna() & closed["beat"].notna()] if len(closed) and "p_up" in closed else closed.iloc[0:0]
+    brier_p = round(float(((with_p["p_up"].astype(float) - with_p["beat"].astype(float)) ** 2).mean()), 3) \
+        if len(with_p) else None
     summary = {
         "decisions": int(len(df)), "closed": int(len(closed)),
         "hit_rate_pct": round(closed["hit"].mean() * 100, 1) if len(closed) else None,
         "avg_excess_pct": round(closed["excess_pct"].mean(), 2) if len(closed) else None,
-        "brier": brier,
+        "brier": brier, "brier_p_up": brier_p,
         "rules_closed": int(len(base_closed)),
         "rules_hit_rate_pct": round(base_closed["hit"].mean() * 100, 1) if len(base_closed) else None,
         "rules_avg_excess_pct": round(base_closed["excess_pct"].mean(), 2) if len(base_closed) else None,
@@ -131,6 +137,18 @@ def main() -> dict:
         closed = closed.assign(conf_bucket=pd.cut(closed["confidence"].astype(float), [0, .5, .7, .85, 1.0]))
         cal = closed.groupby("conf_bucket", observed=True).agg(n=("id", "count"), hit_rate=("hit", "mean")).round(2)
         lines += ["## Confidence calibration (closed)", "", md_table(cal.reset_index().astype(str)), ""]
+    if len(with_p):
+        wp = with_p.assign(p_bucket=pd.cut(with_p["p_up"].astype(float), [0, .4, .5, .6, .7, 1.0]))
+        pc = wp.groupby("p_bucket", observed=True).agg(n=("id", "count"), mean_p_up=("p_up", "mean"),
+                                                       beat_rate=("beat", "mean")).round(2)
+        lines += ["## p_up calibration (closed): stated chance of beating the benchmark vs how often it did", "",
+                  "If beat_rate sits well below mean_p_up in the high buckets, shrink p_up toward the base rate.", "",
+                  md_table(pc.reset_index().astype(str)), ""]
+        th = with_p[with_p["theme"].notna()] if "theme" in with_p else with_p.iloc[0:0]
+        if len(th):
+            bt = th.groupby("theme").agg(n=("id", "count"), beat_rate=("beat", "mean"),
+                                         avg_excess=("excess_pct", "mean")).round(2).reset_index()
+            lines += ["## Watchlist themes (closed calls)", "", md_table(bt), ""]
     recent = df.tail(15) if not df.empty else df
     if len(recent):
         lines += ["## Latest decisions", "", md_table(recent), ""]

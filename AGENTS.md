@@ -17,7 +17,9 @@ Output is research signals from public data, not licensed financial advice.
 | `data/**`, `state/**` | GitHub Actions scripts | read; never hand-edit |
 | `news/daily/inputs/*.md` | `cfa.news_prep` (script) | read |
 | `news/daily/YYYY-MM-DD.md` | news-digest skill (Claude) | write |
-| `weekly/YYYY-Www/{factsheets.md,news_rollup.md,candidates.csv,inputs.json}` | `cfa.weekly_build` | read |
+| `watchlist/themes.yaml` | theme-scout skill (Claude) or the user | write (validate with `cfa.themes check`) |
+| `research/themes/YYYY-MM.md` | theme-scout skill | write |
+| `weekly/YYYY-Www/{factsheets.md,news_rollup.md,themes.md,theme_scan.md,candidates.csv,inputs.json}` | `cfa.weekly_build` | read |
 | `weekly/YYYY-Www/digest.md`, `reports/latest.md` | weekly-digest skill (Claude) | write |
 | `journal/decisions.jsonl` | `python -m cfa.journal add` only | append via that command |
 | `journal/reflections/*.md` | weekly-digest skill | write |
@@ -32,7 +34,9 @@ Output is research signals from public data, not licensed financial advice.
    `python -c "import duckdb; print(duckdb.sql(\"select * from 'data/raw/funds/etf/**/*.parquet' where code='510300'\"))"`.
 2. Every number you write must come from an input file. Copy it exactly. Don't do arithmetic in prose;
    if a figure isn't computed for you, describe it in words.
-3. New picks come only from `weekly/<week>/candidates.csv` or the theme ETFs in `factsheets.md`.
+3. New picks come only from `weekly/<week>/candidates.csv`, the theme ETFs in `factsheets.md`, or the watchlist
+   products in `themes.md`. Every call carries `p_up` (probability of beating the CSI 300 over its horizon),
+   started from the base-rate table and kept within the caps in `config/universe.yaml`.
 4. If `inputs.json` says `"ready": false`, write a `## Data gap` digest and give no buy/sell calls.
 5. Default to hold. Respect `config/risk_rules.yaml`: max actions per week, confidence floor,
    short-holding redemption penalties on open-end funds. The weekly rules-only call is the default for each
@@ -48,6 +52,7 @@ Output is research signals from public data, not licensed financial advice.
 | Daily news digest | Claude scheduled task, skill `news-digest` | 07:07 daily |
 | Weekly build (`cfa.weekly_build`) | Actions `weekly-build.yml` | Sun 06:17 |
 | Weekly advisory | Claude scheduled task, skill `weekly-digest` | Sun 08:07 |
+| Theme scout | Claude, skill `theme-scout` (monthly; not scheduled yet) | 1st Sat of the month |
 | Maintenance (`cfa.maintenance`) | Actions `maintenance.yml` | 1st of month 10:23 |
 | Source smoke test (`cfa.smoke_test`) | Actions `smoke.yml` | on demand |
 
@@ -61,7 +66,7 @@ Claude sessions cannot reach Chinese data hosts. Anything that fetches data runs
 ## Layout
 
 - `src/cfa/`: collectors, `adjust` (split/dividend price adjustment), `signals` (trend, reversal, crowding,
-  regime), `backtest` (walk-forward signal test), `portfolio` (core/satellite targets, rules-only calls),
+  regime), `backtest` (walk-forward signal test, p_up base rates), `themes` (watchlist products and discovery scan), `portfolio` (core/satellite targets, rules-only calls),
   `weekly_build`, `scorecard`, `journal`, `check_digest` (Stop-hook gate), `guard` (PreToolUse hook)
 - `data/raw/funds/<dataset>/year=/month=/<date>.parquet`: write-once daily snapshots (etf, lof, open, open_rank, exchange_rank)
 - `data/raw/news/YYYY/MM/<date>.jsonl`: deduped headlines and snippets with region, themes and score

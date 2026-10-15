@@ -1,7 +1,8 @@
 """Gate for the weekly digest. Run by the Stop hook while state/.digest_in_progress exists.
 
 Rejects the digest when: a required section is missing; a decimal percentage in it is not found in
-weekly/<week>/inputs.json; a pick is outside the candidate list or theme ETFs; this week's journal entries
+weekly/<week>/inputs.json; a pick is outside the candidate list, theme ETFs or watchlist products; a call has no
+p_up; an active watchlist theme has fewer than picks_per_theme product calls; this week's journal entries
 break config/risk_rules.yaml; or old journal lines were changed.
 
     python -m cfa.check_digest [--week 2026-W42]     # prints problems, exit 1 on failure
@@ -14,7 +15,7 @@ import json
 import re
 import sys
 
-from . import journal
+from . import journal, themes
 from .common import STATE, WEEKLY, iso_week_label, load_holdings, read_json, today_hkt
 
 MARKER = STATE / ".digest_in_progress"
@@ -71,8 +72,13 @@ def check(week: str) -> list[str]:
     rule_rows = inputs.get("rule_calls") or []
     allowed_new = {c["code"] for c in inputs.get("candidates") or []} | {t["code"] for t in inputs.get("themes") or []}
     allowed_new |= {c["code"] for c in rule_rows if c.get("action") == "buy"}
+    watch = inputs.get("watch_themes") or []
+    theme_codes = {t["id"]: {p["code"] for p in t.get("products") or []} for t in watch}
+    allowed_new |= set().union(*theme_codes.values()) if theme_codes else set()
+    theme_products = [p for t in watch for p in t.get("products") or []]
     info: dict[str, dict] = {}
-    for row in (inputs.get("themes") or []) + rule_rows + (inputs.get("candidates") or []) + (inputs.get("holdings") or []):
+    for row in (inputs.get("themes") or []) + theme_products + rule_rows + (inputs.get("candidates") or []) + \
+            (inputs.get("holdings") or []):
         info.setdefault(row["code"], {}).update({k: v for k, v in row.items() if v not in (None, "")})
     rule_action = {c["code"]: c["action"] for c in rule_rows}
     recs = [r for r in journal.read_all() if r.get("week") == week]
@@ -84,10 +90,27 @@ def check(week: str) -> list[str]:
     buys = [r for r in recs if r["action"] == "buy"]
     if len(buys) > rules.get("max_new_buys_per_week", 2):
         errs.append(f"{len(buys)} new buys > max_new_buys_per_week")
+    curate = [t for t in watch if t.get("curate")]
+    if curate and "## Theme watchlist" not in text:
+        errs.append("missing section '## Theme watchlist' (the watchlist has active themes)")
+    picks = int(themes.cfg().get("picks_per_theme", 3))
+    for t in curate:
+        need = min(picks, len(theme_codes[t["id"]]))
+        got = {r["code"] for r in recs if r.get("theme") == t["id"] and r["code"] in theme_codes[t["id"]]}
+        if len(got) < need:
+            errs.append(f"theme {t['id']}: {len(got)} product call(s) logged, need {need} (log buy/watch, or the "
+                        f"holding's own call, with \"theme\": \"{t['id']}\")")
     for r in recs:
         tag = f"{r['code']} {r['action']}"
+        if r.get("p_up") is None:
+            errs.append(f"{tag}: no p_up (probability it beats the benchmark); log every call with p_up")
+        th = r.get("theme")
+        if th and th not in theme_codes:
+            errs.append(f"{tag}: theme '{th}' is not on this week's watchlist")
+        elif th and r["code"] not in theme_codes[th]:
+            errs.append(f"{tag}: not in theme {th}'s product list (themes.md)")
         if r["code"] not in held and r["action"] in {"buy", "watch"} and r["code"] not in allowed_new:
-            errs.append(f"{tag}: new pick is not in candidates.csv or the theme ETFs")
+            errs.append(f"{tag}: new pick is not in candidates.csv, the theme ETFs or the watchlist products")
         if r["action"] in ACT and float(r["confidence"]) < rules.get("min_confidence_to_act", 0.6):
             errs.append(f"{tag}: confidence {r['confidence']} below min_confidence_to_act; use hold/watch")
         if r["horizon_weeks"] < rules.get("min_horizon_weeks", 2):
