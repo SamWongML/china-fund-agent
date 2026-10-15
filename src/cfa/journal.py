@@ -35,6 +35,10 @@ def validate(rec: dict) -> list[str]:
     code = str(rec.get("code", ""))
     if len(code) != 6 or not code.isdigit():
         errs.append("code must be 6 digits")
+    if "override" in rec and not isinstance(rec["override"], bool):
+        errs.append("override must be true or false")
+    if rec.get("override") and not str(rec.get("override_reason") or "").strip():
+        errs.append("override=true needs an override_reason (news, policy event, data issue...)")
     held = {h["code"] for h in load_holdings()}
     if rec.get("action") in {"hold", "trim", "sell", "add"} and code not in held:
         errs.append(f"{rec.get('action')} on {code}, which is not in portfolio/holdings.yaml")

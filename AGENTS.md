@@ -22,6 +22,8 @@ Output is research signals from public data, not licensed financial advice.
 | `journal/decisions.jsonl` | `python -m cfa.journal add` only | append via that command |
 | `journal/reflections/*.md` | weekly-digest skill | write |
 | `journal/scorecard*` | `cfa.scorecard` | read |
+| `journal/signal_health.{md,json}` | `cfa.backtest` (in the weekly build) | read |
+| `journal/rules_baseline.jsonl` | `cfa.portfolio` (in the weekly build) | read |
 
 ## Rules for agents
 
@@ -33,7 +35,8 @@ Output is research signals from public data, not licensed financial advice.
 3. New picks come only from `weekly/<week>/candidates.csv` or the theme ETFs in `factsheets.md`.
 4. If `inputs.json` says `"ready": false`, write a `## Data gap` digest and give no buy/sell calls.
 5. Default to hold. Respect `config/risk_rules.yaml`: max actions per week, confidence floor,
-   short-holding redemption penalties on open-end funds.
+   short-holding redemption penalties on open-end funds. The weekly rules-only call is the default for each
+   holding; departing from it needs a logged `override_reason`. Never add to or buy a fund flagged `crowded`.
 6. Commit to `main` with a clear message and push. Never rewrite history.
 
 ## Jobs
@@ -57,10 +60,15 @@ Claude sessions cannot reach Chinese data hosts. Anything that fetches data runs
 
 ## Layout
 
-- `src/cfa/`: collectors, `weekly_build`, `scorecard`, `journal`, `check_digest` (Stop-hook gate), `guard` (PreToolUse hook)
+- `src/cfa/`: collectors, `adjust` (split/dividend price adjustment), `signals` (trend, reversal, crowding,
+  regime), `backtest` (walk-forward signal test), `portfolio` (core/satellite targets, rules-only calls),
+  `weekly_build`, `scorecard`, `journal`, `check_digest` (Stop-hook gate), `guard` (PreToolUse hook)
 - `data/raw/funds/<dataset>/year=/month=/<date>.parquet`: write-once daily snapshots (etf, lof, open, open_rank, exchange_rank)
 - `data/raw/news/YYYY/MM/<date>.jsonl`: deduped headlines and snippets with region, themes and score
-- `data/history/nav/<code>.csv`, `data/history/index/<sym>.csv`: per-code price history for held and watched funds
+- `data/history/nav/<code>.csv`: per-code history (date, raw, price, volume, basis) for held, watched and research
+  funds; `price` is split- and dividend-adjusted (ETF/LOF) or total-return NAV (open funds)
+- `data/history/index/<sym>.csv`, `data/history/macro/` (CSI 300 PE, 10-year CGB yield), `data/ref/fund_actions.csv`
+  (fund splits and dividends)
 - `data/latest/snapshot.md`, `data/manifest.json`, `state/status/<job>.json`, `state/runs/<job>.jsonl`, `state/smoke.md`
 
 To run an Actions job on demand from an agent session (workflow_dispatch isn't available there), write the
