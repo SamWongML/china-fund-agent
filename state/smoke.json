@@ -3,49 +3,49 @@
     "source": "calendar tool_trade_date_hist_sina",
     "ok": true,
     "rows": 8797,
-    "secs": 0.6,
+    "secs": 0.8,
     "error": ""
   },
   {
     "source": "etf eastmoney fund_etf_spot_em",
     "ok": false,
     "rows": null,
-    "secs": 8.0,
+    "secs": 8.1,
     "error": "502 Server Error: Bad Gateway for url: https://push2delay.eastmoney.com/api/qt/clist/get?pn=1&pz=100&po=1&np=1&ut=bd1d9ddb04089700cf9c27f6f7"
   },
   {
     "source": "etf sina fund_etf_category_sina",
     "ok": true,
     "rows": 1702,
-    "secs": 4.5,
+    "secs": 3.7,
     "error": ""
   },
   {
     "source": "etf ths fund_etf_spot_ths",
     "ok": true,
     "rows": 1748,
-    "secs": 2.3,
+    "secs": 2.5,
     "error": ""
   },
   {
     "source": "lof eastmoney fund_lof_spot_em",
     "ok": false,
     "rows": null,
-    "secs": 12.1,
+    "secs": 7.4,
     "error": "('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))"
   },
   {
     "source": "open eastmoney fund_open_fund_daily_em",
     "ok": true,
-    "rows": 24241,
-    "secs": 80.1,
+    "rows": 24242,
+    "secs": 21.8,
     "error": ""
   },
   {
     "source": "open rank fund_open_fund_rank_em",
     "ok": true,
-    "rows": 20582,
-    "secs": 4.4,
+    "rows": 20581,
+    "secs": 5.8,
     "error": ""
   },
   {
@@ -59,84 +59,140 @@
     "source": "fund names fund_name_em",
     "ok": true,
     "rows": 28065,
-    "secs": 3.8,
+    "secs": 5.4,
     "error": ""
   },
   {
     "source": "purchase status fund_purchase_em",
     "ok": true,
     "rows": 27790,
-    "secs": 102.2,
+    "secs": 15.0,
     "error": ""
   },
   {
     "source": "index sina stock_zh_index_daily",
     "ok": true,
     "rows": 6009,
-    "secs": 1.0,
+    "secs": 0.9,
     "error": ""
   },
   {
-    "source": "history etf eastmoney (510300)",
-    "ok": true,
-    "rows": 3494,
-    "secs": 10.8,
-    "error": ""
+    "source": "history etf eastmoney hfq (510300)",
+    "ok": false,
+    "rows": null,
+    "secs": 0.8,
+    "error": "('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))"
   },
   {
     "source": "history etf sina (510300)",
     "ok": true,
     "rows": 3494,
-    "secs": 0.2,
+    "secs": 0.6,
+    "error": ""
+  },
+  {
+    "source": "history etf adjusted (510880)",
+    "ok": true,
+    "rows": 4795,
+    "secs": 0.8,
     "error": ""
   },
   {
     "source": "history open fund (110022)",
     "ok": true,
     "rows": 3903,
-    "secs": 0.6,
+    "secs": 0.1,
     "error": ""
+  },
+  {
+    "source": "fund splits fund_cf_em",
+    "ok": true,
+    "rows": 83,
+    "secs": 0.7,
+    "error": ""
+  },
+  {
+    "source": "fund dividends fund_fh_em",
+    "ok": true,
+    "rows": 5223,
+    "secs": 42.8,
+    "error": ""
+  },
+  {
+    "source": "index csindex (000922)",
+    "ok": true,
+    "rows": 188,
+    "secs": 0.7,
+    "error": ""
+  },
+  {
+    "source": "valuation stock_index_pe_lg (CSI 300)",
+    "ok": true,
+    "rows": 259,
+    "secs": 1.5,
+    "error": ""
+  },
+  {
+    "source": "bond yields bond_zh_us_rate",
+    "ok": true,
+    "rows": 209,
+    "secs": 1.1,
+    "error": ""
+  },
+  {
+    "source": "etf shares sse fund_etf_scale_sse",
+    "ok": false,
+    "rows": null,
+    "secs": 1.3,
+    "error": "Expecting value: line 1 column 1 (char 0)"
+  },
+  {
+    "source": "etf shares szse fund_etf_scale_szse",
+    "ok": false,
+    "rows": null,
+    "secs": 3.4,
+    "error": "('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer'))"
   },
   {
     "source": "calendar macro_info_ws",
     "ok": true,
-    "rows": 77,
-    "secs": 1.0,
+    "rows": 40,
+    "secs": 0.5,
     "error": ""
   },
   {
     "source": "news eastmoney_7x24",
     "ok": true,
     "rows": 200,
-    "secs": 1.6,
+    "secs": 2.4,
     "error": ""
   },
   {
     "source": "news cls_key",
     "ok": true,
-    "rows": 3,
-    "secs": 1.1,
+    "rows": 2,
+    "secs": 0.7,
     "error": ""
   },
   {
     "source": "news cls_all",
     "ok": true,
     "rows": 20,
-    "secs": 0.7,
+    "secs": 0.6,
     "error": ""
   },
   {
     "source": "news futu",
     "ok": true,
     "rows": 50,
-    "secs": 0.8,
+    "secs": 0.7,
     "error": ""
   },
   {
     "source": "news sina_7x24",
     "ok": true,
     "rows": 20,
-    "secs": 1.3,
+    "secs": 1.0,
     "error": ""
   },
   {
@@ -157,55 +213,55 @@
     "source": "rss ecb_press",
     "ok": true,
     "rows": 15,
-    "secs": 0.8,
+    "secs": 0.9,
     "error": ""
   },
   {
     "source": "rss boj_news",
     "ok": true,
     "rows": 54,
-    "secs": 0.4,
+    "secs": 0.3,
     "error": ""
   },
   {
     "source": "rss cnbc_markets",
     "ok": true,
     "rows": 30,
-    "secs": 0.2,
+    "secs": 0.1,
     "error": ""
   },
   {
     "source": "rss cnbc_economy",
     "ok": true,
     "rows": 30,
-    "secs": 0.2,
+    "secs": 0.1,
     "error": ""
   },
   {
     "source": "rss marketwatch_top",
     "ok": true,
     "rows": 10,
-    "secs": 0.1,
+    "secs": 0.0,
     "error": ""
   },
   {
     "source": "rss bloomberg_markets",
     "ok": true,
     "rows": 20,
-    "secs": 0.4,
+    "secs": 0.5,
     "error": ""
   },
   {
     "source": "rss gnews_reuters_business",
     "ok": true,
     "rows": 100,
-    "secs": 0.6,
+    "secs": 0.7,
     "error": ""
   },
   {
     "source": "rss gnews_china_economy",
     "ok": true,
-    "rows": 74,
+    "rows": 76,
     "secs": 0.5,
     "error": ""
   },
@@ -213,7 +269,7 @@
     "source": "rss gnews_cn_regulators",
     "ok": true,
     "rows": 40,
-    "secs": 0.5,
+    "secs": 0.6,
     "error": ""
   }
 ]
