@@ -25,11 +25,12 @@ themes:
   defense:       {etfs: ["512660"], keywords: [军工, 国防, 航天]}
   real_estate:   {etfs: ["512200"], keywords: [房地产, 楼市, 房价, 地产]}
 
-# Candidate screen (weekly build). Scores are z-scores of trailing returns within fund type.
+# Candidate screen (weekly build). Score = weighted percentile rank (0-100) of trailing returns within fund type.
 screen:
   max_candidates: 20
-  max_per_type: 5
+  max_per_type: 3
+  max_bond_candidates: 4
   min_etf_turnover_cny: 50000000     # 5,000万 daily turnover
   chase_warning_1w_pct: 8            # flag if the last week's gain exceeds this
-  exclude_name_keywords: [货币, 理财, 定开, 持有期, 养老, 港, 美, 纳斯达克, 标普, QDII, 恒生, 日经, 德国, 法国, 印度, 越南, 沙特]
+  exclude_name_keywords: [货币, 理财, 定开, 持有, 封闭, 养老, 港, 美, 纳斯达克, 纳指, 标普, 道琼斯, QDII, 恒生, 日经, 德国, 法国, 印度, 越南, 沙特]
   weights: {r_1m: 0.2, r_3m: 0.35, r_6m: 0.25, r_1y: 0.2}

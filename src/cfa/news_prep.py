@@ -49,7 +49,7 @@ def build(d: dt.date) -> str:
         lines += [f"## {region} ({len(sel)} shown)", ""]
         for i in sorted(sel, key=lambda i: i["ts"]):
             srcs = "+".join([i["source"]] + (i.get("also") or []))
-            summary = i["summary"] if i["summary"] and i["summary"][:30] != i["title"][:30] else ""
+            summary = i["summary"] if i["summary"] and i["summary"][:20] not in i["title"] else ""
             th = f" #{' #'.join(i['themes'])}" if i.get("themes") else ""
             lines.append(f"- [{i['ts'][11:16]}][s{i.get('score', 0)}][{srcs}] {i['title']}"
                          + (f" — {summary[:160]}" if summary else "") + th)

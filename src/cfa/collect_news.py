@@ -22,6 +22,7 @@ from .common import CONFIG, HKT, RAW, load_universe, load_yaml, log, log_run, no
 UA = {"User-Agent": "Mozilla/5.0 (china-fund-agent personal research; contact via GitHub)"}
 NEWS_DIR = RAW / "news"
 SNIPPET = 280
+JUNK_TITLE = ("监管局", "行政许可", "办事指南", "名录", "业绩预告", "时政要闻", "首页")
 
 
 def norm_text(s: str) -> str:
@@ -97,7 +98,10 @@ def fetch_rss(feed: dict) -> list[dict]:
         desc = norm_text(desc_node.text if desc_node is not None and desc_node.text else "")
         date_node = next((get(n) for n in ("pubDate", "published", "updated", "date") if get(n) is not None), None)
         when = to_hkt(date_node.text) if date_node is not None else None
-        if title and when:
+        if feed["name"].startswith("gnews") and " - " in title:
+            title = title.rsplit(" - ", 1)[0].strip()  # Google News appends " - Publisher"
+            desc = ""                                  # and its description just repeats the title
+        if len(title) >= 8 and when and not any(k in title for k in JUNK_TITLE):
             items.append({"ts": when, "source": feed["name"], "title": title, "summary": desc[:SNIPPET],
                           "url": link.strip(), "level": "", "region": feed.get("region"),
                           "official": bool(feed.get("official"))})

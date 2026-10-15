@@ -50,7 +50,7 @@ def screen(asof: dt.date, held: set[str]) -> pd.DataFrame:
             df["type"] = "开放式"
         snap = latest_snapshot("open", asof)
         if snap:
-            st = snap[0][1][["code", "purchase"]]
+            st = snap[0][1].reindex(columns=["code", "purchase"])
             df = df.merge(st, on="code", how="left")
             df = df[df["purchase"].fillna("").str.contains("开放")]
         df["kind"] = "open"
@@ -60,11 +60,11 @@ def screen(asof: dt.date, held: set[str]) -> pd.DataFrame:
         df = ex_rank[0][1].copy()
         etf = latest_snapshot("etf", asof)
         if etf:
-            e = etf[0][1][["code", "turnover_cny", "premium_pct"]]
+            e = etf[0][1].reindex(columns=["code", "turnover_cny", "premium_pct"])
             df = df.merge(e, on="code", how="left")
         lof = latest_snapshot("lof", asof)
         if lof:
-            lt = lof[0][1][["code", "turnover_cny"]].rename(columns={"turnover_cny": "lof_turnover"})
+            lt = lof[0][1].reindex(columns=["code", "turnover_cny"]).rename(columns={"turnover_cny": "lof_turnover"})
             df = df.merge(lt, on="code", how="left")
             df["turnover_cny"] = df.get("turnover_cny", pd.Series(index=df.index, dtype=float)).fillna(df["lof_turnover"])
         df = df[df["turnover_cny"].fillna(0) >= cfg.get("min_etf_turnover_cny", 5e7)]
@@ -75,24 +75,34 @@ def screen(asof: dt.date, held: set[str]) -> pd.DataFrame:
     df = pd.concat(frames, ignore_index=True)
     df["type"] = df["type"].fillna("").astype(str)
     excl = cfg.get("exclude_name_keywords") or []
-    mask = ~df["name"].astype(str).apply(lambda n: any(k in n for k in excl)) & ~df["type"].str.contains("货币|理财|QDII")
+    mask = ~df["name"].astype(str).apply(lambda n: any(k in n for k in excl)) & ~df["type"].str.contains("货币|理财|QDII|海外")
     df = df[mask & df["r_1y"].notna() & df["r_3m"].notna()]
     df = df[~df["code"].isin(held)]
     df["group"] = df["type"].str.split("-").str[:2].str.join("-").replace("", "other")
+    # Drop data artifacts (one-off jumps from tiny funds or share events): weekly move far outside the group norm.
+    med = df.groupby("group")["r_1w"].transform("median")
+    mad = df.groupby("group")["r_1w"].transform(lambda s: (s - s.median()).abs().median())
+    df = df[(df["r_1w"] - med).abs() <= 8 * mad.fillna(0) + 2]
     weights = cfg.get("weights") or {"r_1m": .2, "r_3m": .35, "r_6m": .25, "r_1y": .2}
+    # Percentile ranks within the group are robust to outliers; scale 0-100.
     df["score"] = 0.0
     for col, w in weights.items():
-        df["score"] += w * df.groupby("group")[col].transform(lambda s: zscore(s.fillna(s.median())))
+        df["score"] += w * df.groupby("group")[col].rank(pct=True).fillna(0.5) * 100
     df["chase_warning"] = df["r_1w"].fillna(0) > cfg.get("chase_warning_1w_pct", 8)
+    df["asset"] = np.where(df["group"].str.contains("债|固收"), "bond", "growth")
     # collapse share classes (A/C/E...) and keep the best scoring one
-    df["base_name"] = df["name"].astype(str).str.replace(r"[A-Z]$", "", regex=True)
+    # ...and ETFs tracking the same index from different issuers ("银行ETF富国" / "银行ETF华夏")
+    df["base_name"] = df["name"].astype(str).str.replace(r"[A-Z]$", "", regex=True).str.replace(r"(ETF).*$", r"\1", regex=True)
     df = df.sort_values("score", ascending=False).drop_duplicates("base_name")
-    df = df.groupby("group", group_keys=False).head(cfg.get("max_per_type", 5))
-    df = df.sort_values("score", ascending=False).head(cfg.get("max_candidates", 20))
+    df = df.groupby("group", group_keys=False).head(cfg.get("max_per_type", 3))
+    df = df.sort_values("score", ascending=False)
+    bonds = df[df["asset"] == "bond"].head(cfg.get("max_bond_candidates", 4))
+    growth = df[df["asset"] != "bond"].head(cfg.get("max_candidates", 20) - len(bonds))
+    df = pd.concat([growth, bonds]).sort_values("score", ascending=False)
     keep = ["code", "name", "kind", "group", "score", "r_1w", "r_1m", "r_3m", "r_6m", "r_1y", "chase_warning"]
     keep += [c for c in ("turnover_cny", "premium_pct") if c in df]
     out = df[keep].copy()
-    out["score"] = out["score"].round(2)
+    out["score"] = out["score"].round(1)
     return out.reset_index(drop=True)
 
 

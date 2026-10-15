@@ -21,7 +21,7 @@ rss:
   - {name: bloomberg_markets, region: GLOBAL, url: "https://feeds.bloomberg.com/markets/news.rss"}
   - {name: gnews_reuters_business, region: GLOBAL, url: "https://news.google.com/rss/search?q=site:reuters.com+markets+when:1d&hl=en-US&gl=US&ceid=US:en"}
   - {name: gnews_china_economy, region: CN, url: "https://news.google.com/rss/search?q=China+economy+OR+PBOC+OR+yuan+when:1d&hl=en-US&gl=US&ceid=US:en"}
-  - {name: gnews_cn_regulators, region: CN, official: true, url: "https://news.google.com/rss/search?q=site:pbc.gov.cn+OR+site:csrc.gov.cn+OR+site:ndrc.gov.cn+OR+site:mof.gov.cn+OR+site:stats.gov.cn+when:2d&hl=zh-CN&gl=CN&ceid=CN:zh-Hans"}
+  - {name: gnews_cn_regulators, region: CN, url: "https://news.google.com/rss/search?q=site:pbc.gov.cn+OR+site:csrc.gov.cn+OR+site:ndrc.gov.cn+OR+site:mof.gov.cn+OR+site:stats.gov.cn+when:2d&hl=zh-CN&gl=CN&ceid=CN:zh-Hans"}
 
 # Region keywords for Chinese flash items (default region CN).
 region_keywords:
