@@ -1,0 +1,14 @@
+{
+  "decisions": 0,
+  "closed": 0,
+  "hit_rate_pct": null,
+  "avg_excess_pct": null,
+  "brier": null,
+  "brier_p_up": null,
+  "rules_closed": 0,
+  "rules_hit_rate_pct": null,
+  "rules_avg_excess_pct": null,
+  "annual_target_pct": 12.0,
+  "portfolio_1m_pct": null,
+  "benchmark": "sh000300"
+}

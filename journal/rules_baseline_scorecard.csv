@@ -1,0 +1,5 @@
+id,week,code,action,confidence,p_up,view,theme,horizon_weeks,held,override,status
+rules-2026-W42-511010,2026-W42,511010,buy,0.6,,,,4,False,False,pending
+rules-2026-W42-510880,2026-W42,510880,buy,0.6,,,,4,False,False,pending
+rules-2026-W42-510300,2026-W42,510300,buy,0.6,,,,4,False,False,pending
+rules-2026-W42-518880,2026-W42,518880,buy,0.6,,,,4,False,False,pending

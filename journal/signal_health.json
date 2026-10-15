@@ -1,0 +1,181 @@
+{
+  "ok": true,
+  "funds": 51,
+  "first_week": "2016-01-08",
+  "last_week": "2026-10-15",
+  "live": [
+    "low_vol",
+    "ma200_gap",
+    "max_20d",
+    "trend_26w",
+    "turnover_surge"
+  ],
+  "weight_mult": {
+    "trend_12w": 0.0,
+    "trend_26w": 0.5,
+    "ma200_gap": 0.5,
+    "rev_1w": 0.0,
+    "rev_4w": 0.0,
+    "max_20d": 0.5,
+    "turnover_surge": 0.5,
+    "low_vol": 0.5
+  },
+  "signals": {
+    "trend_12w": {
+      "status": "rejected",
+      "weeks": 545,
+      "ic_4w": 0.006,
+      "t_4w": 0.22,
+      "ic_12w": 0.02,
+      "ic_2016_19": -0.005,
+      "ic_2020_22": -0.003,
+      "ic_2023_now": 0.027,
+      "top_third_spread_4w_pct": 0.15,
+      "spread_periods": 137
+    },
+    "trend_26w": {
+      "status": "unproven",
+      "weeks": 545,
+      "ic_4w": 0.014,
+      "t_4w": 0.45,
+      "ic_12w": 0.052,
+      "ic_2016_19": 0.001,
+      "ic_2020_22": 0.017,
+      "ic_2023_now": 0.025,
+      "top_third_spread_4w_pct": 0.16,
+      "spread_periods": 137
+    },
+    "ma200_gap": {
+      "status": "unproven",
+      "weeks": 545,
+      "ic_4w": 0.022,
+      "t_4w": 0.67,
+      "ic_12w": 0.055,
+      "ic_2016_19": 0.011,
+      "ic_2020_22": 0.009,
+      "ic_2023_now": 0.045,
+      "top_third_spread_4w_pct": 0.19,
+      "spread_periods": 137
+    },
+    "rev_1w": {
+      "status": "rejected",
+      "weeks": 545,
+      "ic_4w": -0.027,
+      "t_4w": -0.84,
+      "ic_12w": -0.007,
+      "ic_2016_19": -0.026,
+      "ic_2020_22": -0.04,
+      "ic_2023_now": -0.017,
+      "top_third_spread_4w_pct": -0.14,
+      "spread_periods": 137
+    },
+    "rev_4w": {
+      "status": "rejected",
+      "weeks": 545,
+      "ic_4w": -0.004,
+      "t_4w": -0.13,
+      "ic_12w": -0.007,
+      "ic_2016_19": 0.014,
+      "ic_2020_22": -0.0,
+      "ic_2023_now": -0.026,
+      "top_third_spread_4w_pct": -0.26,
+      "spread_periods": 137
+    },
+    "max_20d": {
+      "status": "unproven",
+      "weeks": 545,
+      "ic_4w": 0.036,
+      "t_4w": 1.12,
+      "ic_12w": 0.046,
+      "ic_2016_19": 0.045,
+      "ic_2020_22": 0.007,
+      "ic_2023_now": 0.05,
+      "top_third_spread_4w_pct": -0.24,
+      "spread_periods": 137
+    },
+    "turnover_surge": {
+      "status": "unproven",
+      "weeks": 545,
+      "ic_4w": 0.016,
+      "t_4w": 0.77,
+      "ic_12w": 0.014,
+      "ic_2016_19": 0.003,
+      "ic_2020_22": 0.049,
+      "ic_2023_now": 0.002,
+      "top_third_spread_4w_pct": -0.01,
+      "spread_periods": 137
+    },
+    "low_vol": {
+      "status": "unproven",
+      "weeks": 545,
+      "ic_4w": 0.047,
+      "t_4w": 1.31,
+      "ic_12w": 0.103,
+      "ic_2016_19": 0.081,
+      "ic_2020_22": -0.019,
+      "ic_2023_now": 0.065,
+      "top_third_spread_4w_pct": -0.06,
+      "spread_periods": 137
+    },
+    "legacy_screen": {
+      "status": "unproven",
+      "weeks": 545,
+      "ic_4w": 0.022,
+      "t_4w": 0.68,
+      "ic_12w": 0.05,
+      "ic_2016_19": 0.012,
+      "ic_2020_22": 0.014,
+      "ic_2023_now": 0.039,
+      "top_third_spread_4w_pct": 0.19,
+      "spread_periods": 137
+    }
+  },
+  "regime_check": {
+    "breadth_above_half": {
+      "weeks": 301,
+      "csi300_next_4w_pct": 0.78
+    },
+    "breadth_below_half": {
+      "weeks": 241,
+      "csi300_next_4w_pct": 0.11
+    }
+  },
+  "base_rates": [
+    {
+      "composite_band": "all",
+      "fund_weeks": 19976,
+      "beat_csi300_pct": 49.3,
+      "avg_excess_4w_pct": 0.28
+    },
+    {
+      "composite_band": "0-20",
+      "fund_weeks": 458,
+      "beat_csi300_pct": 49.8,
+      "avg_excess_4w_pct": 0.81
+    },
+    {
+      "composite_band": "20-40",
+      "fund_weeks": 4555,
+      "beat_csi300_pct": 47.6,
+      "avg_excess_4w_pct": 0.18
+    },
+    {
+      "composite_band": "40-60",
+      "fund_weeks": 9306,
+      "beat_csi300_pct": 48.7,
+      "avg_excess_4w_pct": 0.38
+    },
+    {
+      "composite_band": "60-80",
+      "fund_weeks": 4577,
+      "beat_csi300_pct": 51.1,
+      "avg_excess_4w_pct": 0.17
+    },
+    {
+      "composite_band": "80-100",
+      "fund_weeks": 1080,
+      "beat_csi300_pct": 54.6,
+      "avg_excess_4w_pct": 0.14
+    }
+  ]
+}
