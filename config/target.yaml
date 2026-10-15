@@ -1,0 +1,5 @@
+# Human-owned. The scorecard measures against these; the agent must never edit this file
+# and must not chase the target with concentration or extra trades.
+annual_target_pct: 12      # ≈ 0.95% per month, judged on a rolling 12-month basis
+stretch_annual_pct: 15     # ≈ 1.17% per month
+evaluation: rolling_12m

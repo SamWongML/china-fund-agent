@@ -1,0 +1,35 @@
+# Themes map news keywords to onshore ETFs so news can be counted per theme (closed vocabulary).
+# ETF codes are a starting watchlist; the weekly build logs any code missing from the ETF snapshot.
+# Edit freely: add themes, swap ETFs, add keywords.
+
+benchmarks:
+  primary: sh000300      # CSI 300, used for excess return in the scorecard
+  others: [sh000905, sz399006, sh000922]
+
+themes:
+  broad_large:   {etfs: ["510300"], keywords: [沪深300, 大盘, 蓝筹, A股]}
+  broad_mid:     {etfs: ["510500"], keywords: [中证500, 中小盘]}
+  growth_chinext: {etfs: ["159915"], keywords: [创业板]}
+  star_tech:     {etfs: ["588000"], keywords: [科创板, 科创50]}
+  semis:         {etfs: ["512480", "159995"], keywords: [半导体, 芯片, 光刻, 晶圆, 存储, 集成电路]}
+  ai_compute:    {etfs: ["159819", "515880"], keywords: [人工智能, AI, 大模型, 算力, 数据中心, 通信, 光模块]}
+  brokers:       {etfs: ["512880"], keywords: [券商, 证券公司, 成交额, 两融, 融资余额]}
+  banks:         {etfs: ["512800"], keywords: [银行, 净息差, 存款利率]}
+  dividend:      {etfs: ["510880"], keywords: [红利, 高股息, 分红]}
+  gold:          {etfs: ["518880"], keywords: [黄金, 金价, 贵金属, gold]}
+  gov_bonds:     {etfs: ["511010"], keywords: [国债, 债市, 收益率, 降准, 降息, LPR]}
+  new_energy_ev: {etfs: ["515030", "516160"], keywords: [新能源车, 电动车, 锂电, 电池, 比亚迪]}
+  solar:         {etfs: ["515790"], keywords: [光伏, 硅料, 组件]}
+  healthcare:    {etfs: ["512010", "512170"], keywords: [医药, 医疗, 创新药, 集采, 生物医药]}
+  consumer:      {etfs: ["159928", "512690"], keywords: [消费, 白酒, 零售, 社零, 以旧换新]}
+  defense:       {etfs: ["512660"], keywords: [军工, 国防, 航天]}
+  real_estate:   {etfs: ["512200"], keywords: [房地产, 楼市, 房价, 地产]}
+
+# Candidate screen (weekly build). Scores are z-scores of trailing returns within fund type.
+screen:
+  max_candidates: 20
+  max_per_type: 5
+  min_etf_turnover_cny: 50000000     # 5,000万 daily turnover
+  chase_warning_1w_pct: 8            # flag if the last week's gain exceeds this
+  exclude_name_keywords: [货币, 理财, 定开, 持有期, 养老, 港, 美, 纳斯达克, 标普, QDII, 恒生, 日经, 德国, 法国, 印度, 越南, 沙特]
+  weights: {r_1m: 0.2, r_3m: 0.35, r_6m: 0.25, r_1y: 0.2}

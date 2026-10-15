@@ -1,0 +1,36 @@
+# News sources polled by src/cfa/collect_news.py.
+# AKShare flash feeds are always on; RSS feeds below are optional and checked by the smoke test.
+# region: CN | US | GLOBAL. official: true gives an importance bonus.
+# Store headline + short snippet + link only. Never store paywalled article bodies.
+
+akshare_feeds:
+  - {name: eastmoney_7x24, func: stock_info_global_em}
+  - {name: cls_key, func: stock_info_global_cls, args: {symbol: "重点"}, level: AB}
+  - {name: cls_all, func: stock_info_global_cls, args: {symbol: "全部"}}
+  - {name: futu, func: stock_info_global_futu}
+  - {name: sina_7x24, func: stock_info_global_sina}
+
+rss:
+  - {name: fed_press, region: US, official: true, url: "https://www.federalreserve.gov/feeds/press_all.xml"}
+  - {name: fed_speeches, region: US, official: true, url: "https://www.federalreserve.gov/feeds/speeches.xml"}
+  - {name: ecb_press, region: GLOBAL, official: true, url: "https://www.ecb.europa.eu/rss/press.html"}
+  - {name: boj_news, region: GLOBAL, official: true, url: "https://www.boj.or.jp/en/rss/whatsnew.xml"}
+  - {name: bls_latest, region: US, official: true, url: "https://www.bls.gov/feed/bls_latest.rss"}
+  - {name: cnbc_markets, region: US, url: "https://www.cnbc.com/id/100003114/device/rss/rss.html"}
+  - {name: cnbc_economy, region: US, url: "https://www.cnbc.com/id/20910258/device/rss/rss.html"}
+  - {name: marketwatch_top, region: US, url: "https://feeds.content.dowjones.io/public/rss/mw_topstories"}
+  - {name: bloomberg_markets, region: GLOBAL, url: "https://feeds.bloomberg.com/markets/news.rss"}
+  - {name: gnews_reuters_business, region: GLOBAL, url: "https://news.google.com/rss/search?q=when:1d+allinurl:reuters.com/business&hl=en-US&gl=US&ceid=US:en"}
+  - {name: gnews_china_economy, region: CN, url: "https://news.google.com/rss/search?q=China+economy+OR+PBOC+OR+yuan+when:1d&hl=en-US&gl=US&ceid=US:en"}
+  - {name: gnews_cn_regulators, region: CN, official: true, url: "https://news.google.com/rss/search?q=site:pbc.gov.cn+OR+site:csrc.gov.cn+OR+site:ndrc.gov.cn+OR+site:mof.gov.cn+OR+site:stats.gov.cn+when:2d&hl=zh-CN&gl=CN&ceid=CN:zh-Hans"}
+
+# Region keywords for Chinese flash items (default region CN).
+region_keywords:
+  US: [美国, 美联储, 美股, 纳斯达克, 纳指, 道指, 标普, 特朗普, 白宫, 美债, 鲍威尔, 非农, 美元指数, 华尔街]
+  GLOBAL: [欧洲, 欧盟, 欧央行, 欧元区, 日本, 日央行, 日元, 英国, 英央行, 德国, 法国, 欧佩克, OPEC, 俄罗斯, 中东, 伊朗, 以色列, 印度, 韩国, 原油]
+
+# Words that raise a flash item's importance score by 1 each (max +3).
+macro_keywords: [国务院, 央行, 人民银行, 证监会, 金融监管总局, 发改委, 财政部, 统计局, 降准, 降息, LPR, MLF, 逆回购, 国债,
+                 特别国债, 专项债, 政治局, 关税, 制裁, 出口管制, 汇率, 人民币, 社融, CPI, PPI, PMI, GDP, 非农, 加息, 降息, 美联储,
+                 Fed, tariff, rate cut, rate hike, inflation, payrolls, recession, stimulus]
+official_keywords: [国务院, 人民银行, 证监会, 金融监管总局, 发改委, 财政部, 统计局, 外汇局, 新华社]

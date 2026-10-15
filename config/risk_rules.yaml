@@ -1,0 +1,7 @@
+# Human-owned risk rules. check_digest.py rejects a weekly digest that breaks them.
+max_actions_per_week: 3          # buy/add/trim/sell calls (hold and watch don't count)
+max_new_buys_per_week: 2
+max_single_fund_weight_pct: 25   # any target_weight_pct above this is rejected
+min_confidence_to_act: 0.6       # buy/add/trim/sell below this must be "hold" or "watch"
+min_horizon_weeks: 2
+short_hold_days_block_sell: 7    # open-end funds: redemption within 7 days usually costs ≥1.5%

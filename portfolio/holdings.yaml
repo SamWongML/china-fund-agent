@@ -1,0 +1,21 @@
+# YOUR holdings. You maintain this file; agents read it and never edit it.
+# One entry per product. Update units/cost whenever you buy or sell.
+#
+#   code:   6-digit fund code (quote it, e.g. "510300")
+#   name:   any label you like
+#   type:   etf | lof | open      (open = 场外开放式基金, bought at NAV)
+#   units:  units/shares you hold
+#   cost:   average cost per unit in CNY
+#   bought: date of your first purchase (YYYY-MM-DD); used for short-holding redemption fees
+#
+# Example (copy, remove the leading "# ", edit):
+# - code: "510300"
+#   name: 沪深300ETF
+#   type: etf
+#   units: 10000
+#   cost: 3.85
+#   bought: 2026-09-01
+
+holdings: []
+
+cash_cny: 0   # optional: cash you are willing to deploy

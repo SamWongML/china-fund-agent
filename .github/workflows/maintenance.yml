@@ -1,0 +1,26 @@
+name: maintenance
+on:
+  schedule:
+    - cron: "23 2 1 * *"   # 1st of month 10:23 HKT
+  workflow_dispatch:
+permissions:
+  contents: write
+env:
+  PYTHONPATH: src
+  TZ: Asia/Hong_Kong
+jobs:
+  maintain:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -q -r requirements.txt
+      - id: run
+        run: python -m cfa.maintenance || echo "failed=1" >> "$GITHUB_OUTPUT"
+      - run: scripts/commit_push.sh "maintenance $(date +%F)"
+      - if: steps.run.outputs.failed == '1'
+        run: echo "::error::trading calendar runs out within 30 days" && exit 1

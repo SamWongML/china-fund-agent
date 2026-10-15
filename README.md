@@ -1,0 +1,37 @@
+# china-fund-agent
+
+A personal research loop for China onshore ETFs, LOFs and public funds.
+
+- **Every trading day**, GitHub Actions snapshots the whole onshore fund universe (prices, NAVs,
+  premium/discount, shares outstanding, trailing returns) into `data/`.
+- **Every hour**, Actions collects market-moving headlines from China, the US and the rest of the world
+  into `data/raw/news/`, removing duplicates.
+- **Every morning** Claude writes a short digest of the previous day's news into `news/daily/`.
+- **Every Sunday morning (HKT)** a script builds fact sheets. Claude then reads them and writes buy, add,
+  hold, trim or sell calls for your 3 most promising holdings, plus new picks you don't own, to
+  `weekly/<week>/digest.md`. The latest one is always at `reports/latest.md`.
+- Every call goes into an append-only journal and is graded later against what actually happened
+  (`journal/scorecard_summary.md`). After a few months, that shows whether the advice beats simply
+  holding the CSI 300.
+
+Target: 12% a year (≈0.95%/month), with 15% as a stretch goal, judged on a rolling 12 months. These are
+research signals from public data, not financial advice.
+
+## What you maintain
+
+1. **`portfolio/holdings.yaml`**: what you own. Replace `holdings: []` with your entries, using the
+   format shown in the file. Update it whenever you buy or sell.
+2. Optionally edit `config/risk_rules.yaml` (how bold the advisor may be), `config/target.yaml`, and
+   `config/universe.yaml` (themes and the starting ETF watchlist).
+
+Agents can read these files but are blocked from editing them.
+
+## First run
+
+1. Actions → **smoke** → Run workflow. It calls every data and news source once and writes
+   `state/smoke.md`. Some Chinese sites block overseas cloud IPs. If many sources fail, the fix is a
+   self-hosted runner on a Hong Kong machine.
+2. Actions → **funds** → Run workflow to take the first snapshot. Price history is backfilled
+   automatically for your holdings and the watchlist.
+
+How the system works and the rules agents follow are in [AGENTS.md](AGENTS.md).
