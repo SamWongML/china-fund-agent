@@ -32,8 +32,12 @@ def macro_calendar(days: list[dt.date]) -> pd.DataFrame:
     if not frames:
         return pd.DataFrame()
     df = pd.concat(frames)
-    df = df[pd.to_numeric(df["重要性"], errors="coerce").fillna(0) >= 2]
-    return df[["时间", "地区", "事件", "重要性", "预期", "前值"]].head(40)
+    df["_imp"] = pd.to_numeric(df["重要性"], errors="coerce").fillna(0)
+    df = df[df["_imp"] >= 2]
+    # Keep the most important events of each day so the second day isn't cut off.
+    df["_day"] = df["时间"].astype(str).str[:10]
+    df = df.sort_values(["_day", "_imp"], ascending=[True, False]).groupby("_day").head(20).sort_values("时间")
+    return df[["时间", "地区", "事件", "重要性", "预期", "前值"]]
 
 
 def build(d: dt.date) -> str:
