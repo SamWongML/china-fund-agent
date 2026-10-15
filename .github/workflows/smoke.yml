@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
   push:
     branches: [main]
-    paths: ["src/cfa/smoke_test.py", "src/cfa/collect_*.py", "config/sources.yaml", "requirements.txt"]
+    paths: [".github/kick/smoke", "src/cfa/smoke_test.py", "src/cfa/collect_*.py", "config/sources.yaml", "requirements.txt"]
 permissions:
   contents: write
 env:

@@ -3,6 +3,9 @@ on:
   schedule:
     - cron: "13 22-23,0-15 * * *"   # hourly 06:13-23:13 HKT
     - cron: "13 17,20 * * *"        # 01:13 and 04:13 HKT
+  push:
+    branches: [main]
+    paths: [".github/kick/news"]   # agents can't dispatch: touching this file runs the job
   workflow_dispatch:
 concurrency: {group: news, cancel-in-progress: false}
 permissions:

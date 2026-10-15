@@ -2,6 +2,9 @@ name: maintenance
 on:
   schedule:
     - cron: "23 2 1 * *"   # 1st of month 10:23 HKT
+  push:
+    branches: [main]
+    paths: [".github/kick/maintenance"]   # agents can't dispatch: touching this file runs the job
   workflow_dispatch:
 permissions:
   contents: write

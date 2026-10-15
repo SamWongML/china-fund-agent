@@ -3,6 +3,9 @@ on:
   schedule:
     - cron: "17 15 * * 1-5"   # 23:17 HKT Mon-Fri (open-end NAVs complete after 23:00)
     - cron: "47 23 * * 1-5"   # 07:47 HKT Tue-Sat catch-up
+  push:
+    branches: [main]
+    paths: [".github/kick/funds"]   # agents can't dispatch: touching this file runs the job
   workflow_dispatch:
     inputs:
       date: {description: "trading date YYYY-MM-DD (blank = latest)", required: false}
