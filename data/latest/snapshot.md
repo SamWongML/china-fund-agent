@@ -1,11 +1,11 @@
-# Latest snapshot (target date 2026-10-15, built 2026-10-15 22:07 HKT)
+# Latest snapshot (target date 2026-10-15, built 2026-10-16 00:55 HKT)
 
-Returns use back-adjusted close (ETF/LOF) or accumulated NAV (open funds).
+Returns use split- and dividend-adjusted close (ETF/LOF) or total-return NAV (open funds).
 
 | code | type | held | date | r_1d% | r_5d% | r_20d% | r_60d% |
 |---|---|---|---|---|---|---|---|
 | 510300 | etf | False | 2026-10-15 | -1.21 | -3.35 | -8.52 | -12.32 |
-| 510500 | etf | False | 2026-10-15 | -2.98 | -6.21 | -12.04 | -15.79 |
+| 510500 | etf | False | 2026-10-15 | -3.17 | -6.55 | -12.63 | -16.55 |
 | 159915 | etf | False | 2026-10-15 | -2.94 | -8.09 | -16.81 | -26.7 |
 | 588000 | etf | False | 2026-10-15 | -1.37 | -6.44 | -13.94 | -29.09 |
 | 512480 | etf | False | 2026-10-15 | -2.1 | -8.1 | -14.55 | -31.82 |
@@ -16,7 +16,7 @@ Returns use back-adjusted close (ETF/LOF) or accumulated NAV (open funds).
 | 512800 | etf | False | 2026-10-15 | -0.23 | 0.47 | 2.49 | 9.24 |
 | 510880 | etf | False | 2026-10-15 | -2.66 | -0.29 | -2.63 | 6.94 |
 | 518880 | etf | False | 2026-10-15 | -0.34 | -0.02 | -6.29 | 1.23 |
-| 511010 | etf | False | 2026-10-15 | 0.02 | 0.14 | -0.22 | 0.06 |
+| 511010 | etf | False | 2026-10-15 | 0.02 | 0.14 | 0.22 | 0.5 |
 | 515030 | etf | False | 2026-10-15 | -1.46 | -6.91 | -12.58 | -16.84 |
 | 516160 | etf | False | 2026-10-15 | -2.5 | -7.34 | -12.36 | -16.9 |
 | 515790 | etf | False | 2026-10-15 | -3.25 | -6.42 | -12.61 | -16.0 |
