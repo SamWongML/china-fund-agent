@@ -1,0 +1,161 @@
+# Fields worth watching. Written by the theme-scout skill (monthly) and editable by you.
+# The weekly build finds products for each theme by name keyword; the Sunday advisor curates at least
+# 3 per active theme. Validate with `python -m cfa.themes check`.
+#
+#   status:    active (curated every Sunday) | watch-only (news counted, no products yet) | retired
+#   stage:     emerging | growth | crowded | fading
+#   policy:    the plans or documents that back it (Chinese industrial-policy support is the main edge)
+#   match:     Chinese product-name keywords; exclude: extra name words to drop
+#   news:      keywords counted in the news pipeline
+#   falsifiers: what would make the scout drop or demote it
+# Order matters: the first watch_themes.max_active active themes are used.
+#
+# Seeded 2026-10-15 from the 15th Five-Year Plan (2026-30) priorities and the ETF snapshot. Research note:
+# research/themes/2026-10.md.
+
+themes:
+  - id: ai_compute
+    name: AI and compute
+    status: active
+    stage: growth
+    added: 2026-10-15
+    review_by: 2027-01-15
+    thesis: >-
+      "AI Plus" makes AI adoption a national programme; demand for compute, optical networking and AI software
+      is the most direct listed exposure.
+    policy: ["15th Five-Year Plan (2026-30): AI Plus, multimodal AI, AI agents", "State Council AI Plus action plan"]
+    match: [人工智能, 算力, 云计算, 通信, 软件, 大数据]
+    exclude: []
+    news: [人工智能, AI, 大模型, 算力, 智能体, 数据中心, 光模块, 云计算]
+    falsifiers: >-
+      Capex guidance cuts at the big cloud and telecom buyers; export controls that cut chip supply without a
+      domestic substitute; a new ETF launch wave together with turnover surges (crowding).
+
+  - id: robotics
+    name: Robotics and embodied AI
+    status: active
+    stage: growth
+    added: 2026-10-15
+    review_by: 2027-01-15
+    thesis: >-
+      Robotics is a named strategic emerging industry and embodied AI a named AI priority; humanoid makers are
+      moving from pilots to volume production.
+    policy: ["15th Five-Year Plan: robotics as a strategic emerging industry; embodied AI"]
+    match: [机器人, 机床, 工业母机]
+    exclude: []
+    news: [机器人, 人形机器人, 具身智能, 减速器, 工业母机, 宇树, 优必选]
+    falsifiers: >-
+      Volume-production targets missed; sector stays below its 200-day average for three months while news
+      mentions fall; most products flagged crowded.
+
+  - id: chips_equipment
+    name: Semiconductors and equipment
+    status: active
+    stage: growth
+    added: 2026-10-15
+    review_by: 2027-01-15
+    thesis: >-
+      Full-chain self-sufficiency in integrated circuits is a top State Council priority; equipment and design are
+      where domestic substitution is still early.
+    policy: ["15th Five-Year Plan: integrated circuits", "State Council: full-chain breakthroughs in ICs, machine tools, instruments"]
+    match: [半导体, 芯片]
+    exclude: []
+    news: [半导体, 芯片, 光刻, 晶圆, 存储, 集成电路, 国产替代]
+    falsifiers: Policy support language softens; equipment orders fall; overlaps fully with ai_compute in clusters.
+
+  - id: space_satellites
+    name: Commercial aerospace and satellites
+    status: active
+    stage: emerging
+    added: 2026-10-15
+    review_by: 2027-01-15
+    thesis: >-
+      Satellite internet constellations and commercial launch are scaling, backed by aerospace and 6G priorities.
+    policy: ["15th Five-Year Plan: aerospace (strategic emerging), 6G (future industry)"]
+    match: [卫星, 航天]
+    exclude: []
+    news: [卫星, 商业航天, 火箭, 星座, 6G, 低轨]
+    falsifiers: Launch failures or constellation delays; turnover surge plus launch wave without order news.
+
+  - id: innovative_drugs
+    name: Innovative drugs and biomedicine
+    status: active
+    stage: growth
+    added: 2026-10-15
+    review_by: 2027-01-15
+    thesis: >-
+      Chinese biotech out-licensing and domestic approvals are growing; biomedicine and biomanufacturing are named
+      priorities. Onshore A-share products only (Hong Kong-listed versions are excluded by the config).
+    policy: ["15th Five-Year Plan: biomedicine (strategic emerging), biomanufacturing (future industry)"]
+    match: [创新药, 生物医药, 生物科技, 医疗器械]
+    exclude: []
+    news: [创新药, 医药, 生物医药, 集采, 授权, BD, 临床]
+    falsifiers: Harsher volume-based procurement (集采) on new drugs; US restrictions on licensing deals.
+
+  - id: grid_power
+    name: Grid equipment and power
+    status: active
+    stage: growth
+    added: 2026-10-15
+    review_by: 2027-01-15
+    thesis: >-
+      Grid investment and power demand from data centres and electrification support equipment makers and
+      utilities; also a steadier, lower-volatility way into the AI build-out.
+    policy: ["Energy security and new-type power system plans", "State Grid annual investment plans"]
+    match: [电网, 电力, 储能]
+    exclude: []
+    news: [电网, 特高压, 电力, 储能, 国家电网, 用电量]
+    falsifiers: State Grid investment plan cut; power demand growth slows sharply.
+
+  - id: new_materials
+    name: New materials and rare earths
+    status: active
+    stage: emerging
+    added: 2026-10-15
+    review_by: 2027-01-15
+    thesis: >-
+      New materials are a strategic emerging industry, and rare-earth export controls give China pricing power.
+    policy: ["15th Five-Year Plan: new materials (strategic emerging)", "Rare-earth export control regime"]
+    match: [新材料, 稀土, 稀有金属]
+    exclude: []
+    news: [新材料, 稀土, 出口管制, 稀有金属]
+    falsifiers: Export controls relaxed in a trade deal; rare-earth prices fall for a quarter.
+
+  - id: quantum
+    name: Quantum technology
+    status: watch-only
+    stage: emerging
+    added: 2026-10-15
+    review_by: 2027-01-15
+    thesis: A named future industry with no onshore ETF yet; watch news until products list.
+    policy: ["15th Five-Year Plan: quantum technology (future industry)"]
+    match: [量子]
+    exclude: []
+    news: [量子]
+    falsifiers: No commercial milestones within a year.
+
+  - id: brain_computer
+    name: Brain-computer interfaces
+    status: watch-only
+    stage: emerging
+    added: 2026-10-15
+    review_by: 2027-01-15
+    thesis: A named future industry with no onshore ETF yet; watch news until products list.
+    policy: ["15th Five-Year Plan: brain-computer interfaces (future industry)"]
+    match: [脑机]
+    exclude: []
+    news: [脑机接口, 脑机]
+    falsifiers: No clinical approvals within a year.
+
+  - id: low_altitude
+    name: Low-altitude economy
+    status: watch-only
+    stage: emerging
+    added: 2026-10-15
+    review_by: 2027-01-15
+    thesis: Drones and eVTOL backed by national and local pilots; the only products (通用航空) are very illiquid.
+    policy: ["Low-altitude economy pilot programmes (national and provincial)"]
+    match: [低空, 通用航空]
+    exclude: []
+    news: [低空经济, 低空, eVTOL, 无人机, 通用航空]
+    falsifiers: Pilot programmes stall; products stay illiquid.

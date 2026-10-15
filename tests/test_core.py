@@ -85,7 +85,7 @@ def test_check_digest_rules_and_numbers(root, monkeypatch):
     monkeypatch.setattr(journal, "PATH", root / "journal" / "decisions.jsonl")
     monkeypatch.setattr(common, "iso_week_label", lambda d: week)
     monkeypatch.setattr(journal, "iso_week_label", lambda d: week)
-    rec = {"action": "hold", "confidence": 0.6, "horizon_weeks": 4, "thesis": "t", "falsifiers": "f", "data_asof": "2026-10-16"}
+    rec = {"action": "hold", "p_up": 0.6, "horizon_weeks": 4, "thesis": "t", "falsifiers": "f", "data_asof": "2026-10-16"}
     journal.add(rec | {"code": "510300"})
     journal.add(rec | {"code": "512480", "action": "watch"})
     assert check_digest.check(week) == []

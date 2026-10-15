@@ -1,6 +1,6 @@
 """Append-only decision journal (journal/decisions.jsonl).
 
-    python -m cfa.journal add --json '{"code": "510300", "action": "hold", ...}'
+    python -m cfa.journal add --json '{"code": "510300", "action": "hold", "p_up": 0.55, ...}'
     python -m cfa.journal verify          # existing lines unchanged vs git HEAD
 
 The agent must only add decisions through `add`; Edit/Write on the file is blocked by a hook.
@@ -13,11 +13,48 @@ import subprocess
 import sys
 import uuid
 
-from .common import JOURNAL, ROOT, iso_week_label, load_holdings, now_hkt
+from .common import JOURNAL, ROOT, iso_week_label, load_holdings, load_universe, now_hkt
 
 PATH = JOURNAL / "decisions.jsonl"
 ACTIONS = {"buy", "add", "hold", "trim", "sell", "watch"}
 REQUIRED = {"code", "action", "confidence", "horizon_weeks", "thesis", "falsifiers", "data_asof"}
+DOWN = {"trim", "sell"}   # graded as right when the fund trails the benchmark
+
+
+def advice_cfg() -> dict:
+    return load_universe().get("advice") or {}
+
+
+def view(action: str, p_up: float, held: bool) -> str:
+    """What the user sees: Buy/Sell for holdings, Buy/Watch for everything else."""
+    if not held:
+        return "buy" if action == "buy" else "watch"
+    if action in DOWN:
+        return "sell"
+    if action == "hold":
+        return "buy" if p_up >= 0.5 else "sell"
+    return "buy"
+
+
+def normalize(rec: dict) -> dict:
+    """p_up is the probability the fund beats the benchmark over the horizon. confidence (the probability the
+    logged action turns out right, which the scorecard grades) is derived from it, never typed separately."""
+    rec = dict(rec)
+    if rec.get("p_up") is None:
+        return rec
+    try:
+        p = round(float(rec["p_up"]), 3)
+    except (TypeError, ValueError):
+        return rec
+    derived = round(1 - p, 3) if rec.get("action") in DOWN else p
+    if "confidence" in rec and rec["confidence"] is not None:
+        try:
+            if abs(float(rec["confidence"]) - derived) > 0.011:
+                rec["_conflict"] = derived
+        except (TypeError, ValueError):
+            pass
+    rec["p_up"], rec["confidence"] = p, derived
+    return rec
 
 
 def validate(rec: dict) -> list[str]:
@@ -35,6 +72,25 @@ def validate(rec: dict) -> list[str]:
     code = str(rec.get("code", ""))
     if len(code) != 6 or not code.isdigit():
         errs.append("code must be 6 digits")
+    if "_conflict" in rec:
+        errs.append(f"confidence must equal {rec['_conflict']} for p_up {rec.get('p_up')}; pass p_up only")
+    if rec.get("p_up") is not None:
+        a = advice_cfg()
+        try:
+            p = float(rec["p_up"])
+        except (TypeError, ValueError):
+            p = None
+            errs.append("p_up must be a number")
+        if p is not None:
+            lo, hi = float(a.get("p_min", 0.15)), float(a.get("p_max", 0.85))
+            if not lo <= p <= hi:
+                errs.append(f"p_up must be between {lo} and {hi} (weekly fund outcomes are near coin flips)")
+            if rec.get("action") in DOWN and p >= 0.5:
+                errs.append(f"{rec['action']} needs p_up below 0.5 (you expect it to trail the benchmark)")
+            if rec.get("action") in {"buy", "add"} and p <= 0.5:
+                errs.append(f"{rec['action']} needs p_up above 0.5")
+    if "theme" in rec and not str(rec.get("theme") or "").strip():
+        errs.append("theme must be a watchlist theme id when given")
     if "override" in rec and not isinstance(rec["override"], bool):
         errs.append("override must be true or false")
     if rec.get("override") and not str(rec.get("override_reason") or "").strip():
@@ -52,14 +108,17 @@ def read_all() -> list[dict]:
 
 
 def add(rec: dict) -> dict:
-    rec = dict(rec)
+    rec = normalize(rec)
     rec["code"] = str(rec.get("code", "")).zfill(6)
     errs = validate(rec)
     if errs:
         raise ValueError("; ".join(errs))
     now = now_hkt()
+    held = rec["code"] in {h["code"] for h in load_holdings()}
     rec = {"id": uuid.uuid4().hex[:12], "ts": now.isoformat(timespec="seconds"), "week": iso_week_label(now.date()),
-           "held": rec["code"] in {h["code"] for h in load_holdings()}, **rec}
+           "held": held, **rec}
+    if rec.get("p_up") is not None:
+        rec["view"] = view(rec["action"], rec["p_up"], held)
     PATH.parent.mkdir(parents=True, exist_ok=True)
     with PATH.open("a", encoding="utf-8") as f:
         f.write(json.dumps(rec, ensure_ascii=False) + "\n")

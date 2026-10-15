@@ -7,9 +7,13 @@ A personal research loop for China onshore ETFs, LOFs and public funds.
 - **Every hour**, Actions collects market-moving headlines from China, the US and the rest of the world
   into `data/raw/news/`, removing duplicates.
 - **Every morning** Claude writes a short digest of the previous day's news into `news/daily/`.
-- **Every Sunday morning (HKT)** a script builds fact sheets. Claude then reads them and writes buy, add,
-  hold, trim or sell calls for your 3 most promising holdings, plus new picks you don't own, to
-  `weekly/<week>/digest.md`. The latest one is always at `reports/latest.md`.
+- **Every Sunday morning (HKT)** a script builds fact sheets. Claude then reads them and writes calls to
+  `weekly/<week>/digest.md` (latest always at `reports/latest.md`): **Buy or Sell** for your holdings,
+  **Buy or Watch** for funds you don't own, each with a percentage, the chance it beats the CSI 300 over the
+  call's horizon. Percentages start from a historical base rate and are graded every week.
+- **Theme watchlist**: `watchlist/themes.yaml` lists promising fields (AI, robotics, chips...), maintained by a
+  monthly theme-scout run. The Sunday build finds every onshore ETF in each field, one per index family, and
+  Claude covers at least 3 per active field.
 - The Sunday build also scores every fund on signals that have held up in China's market (3-6 month trend,
   crowding and lottery-like spikes, volatility), tests those signals on ten years of history every week
   (`journal/signal_health.md`), labels the market regime, and proposes core/satellite target weights. Its
