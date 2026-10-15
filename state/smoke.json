@@ -3,70 +3,70 @@
     "source": "calendar tool_trade_date_hist_sina",
     "ok": true,
     "rows": 8797,
-    "secs": 0.9,
+    "secs": 0.8,
     "error": ""
   },
   {
     "source": "etf eastmoney fund_etf_spot_em",
     "ok": false,
     "rows": null,
-    "secs": 8.4,
+    "secs": 8.2,
     "error": "502 Server Error: Bad Gateway for url: https://push2delay.eastmoney.com/api/qt/clist/get?pn=1&pz=100&po=1&np=1&ut=bd1d9ddb04089700cf9c27f6f7"
   },
   {
     "source": "etf sina fund_etf_category_sina",
     "ok": true,
     "rows": 1702,
-    "secs": 3.5,
+    "secs": 4.7,
     "error": ""
   },
   {
     "source": "etf ths fund_etf_spot_ths",
     "ok": true,
     "rows": 1748,
-    "secs": 1.7,
+    "secs": 3.1,
     "error": ""
   },
   {
     "source": "lof eastmoney fund_lof_spot_em",
     "ok": false,
     "rows": null,
-    "secs": 6.7,
+    "secs": 9.2,
     "error": "('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))"
   },
   {
     "source": "open eastmoney fund_open_fund_daily_em",
     "ok": true,
     "rows": 24241,
-    "secs": 24.7,
+    "secs": 144.0,
     "error": ""
   },
   {
     "source": "open rank fund_open_fund_rank_em",
     "ok": true,
     "rows": 20582,
-    "secs": 113.8,
+    "secs": 5.6,
     "error": ""
   },
   {
     "source": "exchange rank fund_exchange_rank_em",
     "ok": true,
     "rows": 1685,
-    "secs": 4.6,
+    "secs": 4.0,
     "error": ""
   },
   {
     "source": "fund names fund_name_em",
     "ok": true,
     "rows": 28065,
-    "secs": 6.1,
+    "secs": 5.8,
     "error": ""
   },
   {
     "source": "purchase status fund_purchase_em",
     "ok": true,
     "rows": 27790,
-    "secs": 114.5,
+    "secs": 20.4,
     "error": ""
   },
   {
@@ -79,64 +79,64 @@
   {
     "source": "history etf eastmoney (510300)",
     "ok": true,
-    "rows": 187,
-    "secs": 1.2,
+    "rows": 3494,
+    "secs": 12.5,
     "error": ""
   },
   {
     "source": "history etf sina (510300)",
     "ok": true,
     "rows": 3494,
-    "secs": 0.3,
+    "secs": 0.1,
     "error": ""
   },
   {
     "source": "history open fund (110022)",
     "ok": true,
     "rows": 3903,
-    "secs": 0.1,
+    "secs": 0.6,
     "error": ""
   },
   {
     "source": "calendar macro_info_ws",
     "ok": true,
     "rows": 77,
-    "secs": 0.7,
+    "secs": 3.5,
     "error": ""
   },
   {
     "source": "news eastmoney_7x24",
     "ok": true,
     "rows": 200,
-    "secs": 2.1,
+    "secs": 4.0,
     "error": ""
   },
   {
     "source": "news cls_key",
     "ok": true,
-    "rows": 4,
-    "secs": 0.7,
+    "rows": 3,
+    "secs": 1.2,
     "error": ""
   },
   {
     "source": "news cls_all",
     "ok": true,
     "rows": 20,
-    "secs": 0.5,
+    "secs": 0.8,
     "error": ""
   },
   {
     "source": "news futu",
     "ok": true,
     "rows": 50,
-    "secs": 1.0,
+    "secs": 1.1,
     "error": ""
   },
   {
     "source": "news sina_7x24",
     "ok": true,
     "rows": 20,
-    "secs": 1.3,
+    "secs": 1.6,
     "error": ""
   },
   {
@@ -157,22 +157,15 @@
     "source": "rss ecb_press",
     "ok": true,
     "rows": 15,
-    "secs": 1.0,
+    "secs": 0.4,
     "error": ""
   },
   {
     "source": "rss boj_news",
     "ok": true,
     "rows": 54,
-    "secs": 0.3,
+    "secs": 0.2,
     "error": ""
-  },
-  {
-    "source": "rss bls_latest",
-    "ok": false,
-    "rows": null,
-    "secs": 0.0,
-    "error": "403 Client Error: Forbidden for url: https://www.bls.gov/feed/bls_latest.rss"
   },
   {
     "source": "rss cnbc_markets",
@@ -199,28 +192,28 @@
     "source": "rss bloomberg_markets",
     "ok": true,
     "rows": 20,
-    "secs": 0.4,
+    "secs": 0.3,
     "error": ""
   },
   {
     "source": "rss gnews_reuters_business",
     "ok": true,
-    "rows": 0,
-    "secs": 0.2,
+    "rows": 100,
+    "secs": 0.6,
     "error": ""
   },
   {
     "source": "rss gnews_china_economy",
     "ok": true,
     "rows": 72,
-    "secs": 0.5,
+    "secs": 0.4,
     "error": ""
   },
   {
     "source": "rss gnews_cn_regulators",
     "ok": true,
     "rows": 100,
-    "secs": 0.4,
+    "secs": 0.5,
     "error": ""
   }
 ]
