@@ -15,10 +15,10 @@ import json
 import numpy as np
 import pandas as pd
 
-from . import scorecard
+from . import backtest, portfolio, scorecard, signals
 from .collect_funds import snapshot_path, update_history
 from .collect_news import load_day
-from .common import (CONFIG, HISTORY, NEWS, RAW, REF, WEEKLY, guess_type, iso_week_label, last_trading_day,
+from .common import (CONFIG, HISTORY, NEWS, PORTFOLIO, RAW, REF, WEEKLY, guess_type, iso_week_label, last_trading_day,
                      load_holdings, load_universe, load_yaml, log, log_run, md_table, now_hkt, read_status, retry,
                      today_hkt, update_status, watch_codes, write_json, STATE)
 
@@ -115,6 +115,7 @@ def facts(code: str, kind: str, etf_snaps: list[tuple[dt.date, pd.DataFrame]]) -
         h = pd.read_csv(p, dtype={"date": str})
         px = h["price"].astype(float).to_numpy()
         f["last_date"] = h["date"].iloc[-1]
+        f["basis"] = h["basis"].iloc[-1] if "basis" in h else None
 
         def r(n):
             return round((px[-1] / px[-1 - n] - 1) * 100, 2) if len(px) > n else None
@@ -199,6 +200,43 @@ def news_rollup(sunday: dt.date) -> tuple[str, dict]:
     return "\n".join(lines) + "\n", {"themes_this_week": dict(cnt), "digests": digests}
 
 
+def signal_layer(asof: dt.date, week: str, holdings: list[dict], hold_rows: list[dict], cand_codes: list[str],
+                 etf_snaps, ready: bool) -> dict:
+    """Signals, regime, backtest health, core/satellite targets and the rules-only calls."""
+    try:
+        valuation = signals.refresh_valuation()
+    except Exception as e:  # akshare missing or offline: fall back to the cached series
+        log.warning("valuation refresh failed: %s", e)
+        valuation = signals.valuation_from_cache()
+    health = backtest.run()
+    universe = backtest.universe_codes()
+    up, ut = signals.panel(universe)
+    reg = signals.regime(up, valuation)
+    codes = list(dict.fromkeys(universe + [h["code"] for h in holdings] + cand_codes))
+    p, t = signals.panel(codes)
+    sig = signals.snapshot(p, t, health.get("weight_mult")).set_index("code") if not p.empty else pd.DataFrame()
+    out = {"regime": reg, "valuation": valuation, "health": health, "signals": sig, "targets": None, "calls": []}
+    if sig.empty:
+        return out
+    tg = portfolio.targets(sig, reg["label"])
+    values = {r["code"]: r.get("value_cny") for r in hold_rows}
+    cash = float(load_yaml(PORTFOLIO / "holdings.yaml").get("cash_cny") or 0)
+    calls = portfolio.rule_calls(tg, [{"code": h["code"], "value_cny": values.get(h["code"])} for h in holdings],
+                                 sig, cash)
+    names = {}
+    if etf_snaps:
+        names = etf_snaps[-1][1].set_index("code")["name"].to_dict()
+    for c in calls:
+        c["name"] = names.get(c["code"], "")
+    if ready:
+        portfolio.write_baseline(calls, week, asof)
+    out.update(targets=tg, calls=calls)
+    return out
+
+
+SIG_COLS = ["composite", "crowded", "cluster", "trend_12w_rank", "trend_26w_rank", "above_ma200", "vol60_pct"]
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--date", type=dt.date.fromisoformat, help="the Sunday (HKT) this build is for")
@@ -211,11 +249,11 @@ def main() -> int:
     holdings = load_holdings()
     held = {h["code"] for h in holdings}
 
-    hist = update_history(watch_codes())
+    research = {c: "etf" for c in backtest.universe_codes()}
+    hist = update_history(research | watch_codes())
     cands = screen(asof, held)
     if not cands.empty:
         hist |= update_history({c: k for c, k in zip(cands["code"], cands["kind"])})
-        cands.to_csv(out_dir / "candidates.csv", index=False)
     etf_snaps = latest_snapshot("etf", asof, n=6)
 
     hold_rows = []
@@ -223,19 +261,6 @@ def main() -> int:
         kind = (h.get("type") or guess_type(h["code"])).lower()
         f = facts(h["code"], kind, etf_snaps)
         hold_rows.append(f | holding_facts(h, f, asof))
-    cand_rows = [facts(c, k, etf_snaps) | {"name": n, "screen_score": s, "chase_warning": bool(w)}
-                 for c, k, n, s, w in zip(cands.get("code", []), cands.get("kind", []), cands.get("name", []),
-                                          cands.get("score", []), cands.get("chase_warning", []))]
-    theme_rows = []
-    for theme, spec in (load_universe().get("themes") or {}).items():
-        for c in spec.get("etfs") or []:
-            f = facts(str(c).zfill(6), "etf", etf_snaps)
-            theme_rows.append({"theme": theme, **{k: f.get(k) for k in ("code", "name", "r_1w", "r_4w", "r_12w",
-                                                                         "off_52w_high", "premium_pct", "shares_chg_5d_pct")}})
-
-    rollup_md, rollup_meta = news_rollup(sunday)
-    (out_dir / "news_rollup.md").write_text(rollup_md, encoding="utf-8")
-    score = scorecard.main()
 
     funds_status = read_status("funds")
     last_ok = funds_status.get("last_ok_date")
@@ -245,22 +270,74 @@ def main() -> int:
     if missing_hist:
         ready = False
 
+    layer = signal_layer(asof, week, holdings, hold_rows, list(cands.get("code", [])), etf_snaps, ready)
+    sig = layer["signals"]
+
+    def sigs(code: str) -> dict:
+        if sig.empty or code not in sig.index:
+            return {}
+        return {k: (None if pd.isna(v) else v) if not isinstance(v, (bool, np.bool_)) else bool(v)
+                for k, v in sig.loc[code, SIG_COLS].items()}
+
+    for r in hold_rows:
+        r.update(sigs(r["code"]))
+    if not cands.empty:
+        cands["composite"] = cands["code"].map(lambda c: sigs(c).get("composite"))
+        cands["crowded"] = cands["code"].map(lambda c: sigs(c).get("crowded", ""))
+        cands["cluster"] = cands["code"].map(lambda c: sigs(c).get("cluster"))
+        cands = cands.sort_values(["composite", "score"], ascending=False, na_position="last")
+        cands.to_csv(out_dir / "candidates.csv", index=False)
+    cand_rows = [facts(c, k, etf_snaps) | {"name": n, "screen_score": s, "chase_warning": bool(w)} | sigs(c)
+                 for c, k, n, s, w in zip(cands.get("code", []), cands.get("kind", []), cands.get("name", []),
+                                          cands.get("score", []), cands.get("chase_warning", []))]
+    theme_rows = []
+    for theme, spec in (load_universe().get("themes") or {}).items():
+        for c in spec.get("etfs") or []:
+            f = facts(str(c).zfill(6), "etf", etf_snaps)
+            theme_rows.append({"theme": theme, **{k: f.get(k) for k in ("code", "name", "r_1w", "r_4w", "r_12w",
+                                                                         "off_52w_high", "premium_pct", "shares_chg_5d_pct")},
+                               **{k: sigs(f["code"]).get(k) for k in ("composite", "crowded", "cluster")}})
+    rule_rows = [c | {k: sigs(c["code"]).get(k) for k in ("composite", "crowded", "cluster")} for c in layer["calls"]]
+
+    rollup_md, rollup_meta = news_rollup(sunday)
+    (out_dir / "news_rollup.md").write_text(rollup_md, encoding="utf-8")
+    score = scorecard.main()
+
     def tbl(rows):
         return md_table(pd.DataFrame(rows)) if rows else "_none_"
+    reg = layer["regime"]
+    health = layer["health"]
+    statuses = {k: v["status"] for k, v in (health.get("signals") or {}).items()}
+    tg = layer["targets"] or {}
     md = [f"# Fact sheets {week} (data as of {asof}, built {now_hkt():%Y-%m-%d %H:%M} HKT)", "",
           f"Data ready: **{ready}** (last good fund snapshot {last_ok}; missing history: {missing_hist or 'none'}).", "",
           "Returns in %: r_1w=5 trading days, r_4w=20, r_12w=60, r_26w=120, r_52w=250. "
-          "Prices are back-adjusted (ETF/LOF) or accumulated NAV (open funds); pnl_pct uses the raw latest price.", "",
-          "## Holdings", "", tbl(hold_rows), "", "## Candidates (pre-screened, not held)", "", tbl(cand_rows), "",
+          "Prices are adjusted for splits and dividends (ETF/LOF) or total-return NAV (open funds); basis says which. "
+          "pnl_pct uses the raw latest price.", "",
+          "Signals: composite = 0-100 weighted percentile of the live signals (trend, reversal, lottery, crowding, "
+          "low volatility) across ~60 sector and broad ETFs plus holdings and candidates; higher is better. "
+          "crowded = reasons not to add now. cluster = the highest-ranked fund it moves with (60-day correlation of "
+          "market-relative returns above the threshold); funds sharing a cluster are one bet. Details: journal/signal_health.md.", "",
+          f"## Market regime: **{reg.get('label')}**", "", tbl([reg]), "",
+          f"Signal weight multipliers from the backtest: {health.get('weight_mult') or 'none (backtest unavailable)'}. "
+          f"Backtest status: {statuses or health.get('reason')}.", "",
+          "## Holdings", "", tbl(hold_rows), "",
+          "## Rules-only calls (the baseline your calls are graded against)", "",
+          f"Target weights: core {tg.get('core')}, satellite {tg.get('satellite')}, unallocated "
+          f"{tg.get('unallocated_pct')}%. {' '.join(tg.get('notes') or [])}", "", tbl(rule_rows), "",
+          "## Candidates (pre-screened, not held)", "", tbl(cand_rows), "",
           "## Theme ETFs", "", tbl(theme_rows), ""]
     (out_dir / "factsheets.md").write_text("\n".join(md), encoding="utf-8")
     inputs = {"week": week, "sunday": str(sunday), "asof": str(asof), "ready": ready, "holdings": hold_rows,
-              "candidates": cand_rows, "themes": theme_rows, "scorecard": score, "news": rollup_meta,
+              "candidates": cand_rows, "themes": theme_rows, "regime": reg, "portfolio": tg, "rule_calls": rule_rows,
+              "signal_health": {"weight_mult": health.get("weight_mult"), "status": statuses},
+              "scorecard": score, "news": rollup_meta,
               "risk_rules": load_yaml(CONFIG / "risk_rules.yaml"), "target": load_yaml(CONFIG / "target.yaml")}
     write_json(out_dir / "inputs.json", inputs)
-    update_status("weekly_build", {"week": week, "asof": str(asof), "ready": ready, "candidates": len(cand_rows)})
+    update_status("weekly_build", {"week": week, "asof": str(asof), "ready": ready, "candidates": len(cand_rows),
+                                   "regime": reg.get("label")})
     log_run("weekly_build", True, week=week, ready=ready, history_failures=[c for c, v in hist.items() if not v["ok"]])
-    log.info("weekly build %s ready=%s candidates=%d", week, ready, len(cand_rows))
+    log.info("weekly build %s ready=%s candidates=%d regime=%s", week, ready, len(cand_rows), reg.get("label"))
     return 0
 
 

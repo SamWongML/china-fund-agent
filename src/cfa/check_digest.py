@@ -68,7 +68,13 @@ def check(week: str) -> list[str]:
 
     rules = inputs.get("risk_rules") or {}
     held = {h["code"]: h for h in load_holdings()}
+    rule_rows = inputs.get("rule_calls") or []
     allowed_new = {c["code"] for c in inputs.get("candidates") or []} | {t["code"] for t in inputs.get("themes") or []}
+    allowed_new |= {c["code"] for c in rule_rows if c.get("action") == "buy"}
+    info: dict[str, dict] = {}
+    for row in (inputs.get("themes") or []) + rule_rows + (inputs.get("candidates") or []) + (inputs.get("holdings") or []):
+        info.setdefault(row["code"], {}).update({k: v for k, v in row.items() if v not in (None, "")})
+    rule_action = {c["code"]: c["action"] for c in rule_rows}
     recs = [r for r in journal.read_all() if r.get("week") == week]
     if held and not any(r["code"] in held for r in recs):
         errs.append("no journal entries for holdings this week (log each top-3 holding call with `python -m cfa.journal add`)")
@@ -96,6 +102,22 @@ def check(week: str) -> list[str]:
                 errs.append(f"{tag}: held {hrow['days_held']} days; short-holding redemption penalty applies")
         if r["code"] not in text:
             errs.append(f"{tag}: logged in the journal but not mentioned in the digest")
+        overridden = bool(r.get("override")) and bool(str(r.get("override_reason") or "").strip())
+        crowd = info.get(r["code"], {}).get("crowded")
+        if r["action"] in {"buy", "add"} and crowd and not overridden:
+            errs.append(f"{tag}: flagged crowded ({crowd}); hold or watch instead, or log override with a reason")
+        ra = rule_action.get(r["code"])
+        if r["code"] in held and ra and r["action"] != ra and not overridden:
+            errs.append(f"{tag}: differs from the rules-only call '{ra}'; follow it or log override=true "
+                        "with an override_reason")
+    new_buys = [r for r in recs if r["action"] == "buy" and r["code"] not in held]
+    seen: dict[str, str] = {}
+    for r in new_buys:
+        cl = info.get(r["code"], {}).get("cluster")
+        if cl and cl in seen:
+            errs.append(f"{r['code']} buy: same cluster as {seen[cl]} (one bet); pick one")
+        elif cl:
+            seen[cl] = r["code"]
     return errs
 
 

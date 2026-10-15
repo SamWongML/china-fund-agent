@@ -10,6 +10,11 @@ A personal research loop for China onshore ETFs, LOFs and public funds.
 - **Every Sunday morning (HKT)** a script builds fact sheets. Claude then reads them and writes buy, add,
   hold, trim or sell calls for your 3 most promising holdings, plus new picks you don't own, to
   `weekly/<week>/digest.md`. The latest one is always at `reports/latest.md`.
+- The Sunday build also scores every fund on signals that have held up in China's market (3-6 month trend,
+  crowding and lottery-like spikes, volatility), tests those signals on ten years of history every week
+  (`journal/signal_health.md`), labels the market regime, and proposes core/satellite target weights. Its
+  mechanical "rules-only" calls are graded alongside Claude's, so you can see whether Claude's judgement adds
+  anything.
 - Every call goes into an append-only journal and is graded later against what actually happened
   (`journal/scorecard_summary.md`). After a few months, that shows whether the advice beats simply
   holding the CSI 300.

@@ -13,6 +13,7 @@ import datetime as dt
 
 import pandas as pd
 
+from . import adjust
 from .common import (HISTORY, LATEST, RAW, REF, first_ok, last_trading_day, load_holdings, log, log_run,
                      md_table, now_hkt, retry, today_hkt, update_status, watch_codes, write_json, sha256_file, DATA)
 
@@ -138,6 +139,25 @@ def validate(dataset: str, df: pd.DataFrame) -> list[str]:
     return problems
 
 
+def add_exchange_shares(df: pd.DataFrame, target: dt.date) -> pd.DataFrame:
+    """The Sina/THS ETF fallbacks have no shares outstanding; take them from the SSE and SZSE fund lists."""
+    import akshare as ak
+    parts = []
+    for name, fn in (("sse", lambda: ak.fund_etf_scale_sse(date=target.strftime("%Y%m%d"))),
+                     ("szse", ak.fund_etf_scale_szse)):
+        try:
+            s = retry(fn, attempts=2, name=f"etf shares {name}")
+            parts.append(pd.DataFrame({"code": s["基金代码"].astype(str).str.zfill(6), "shares": _num(s["基金份额"])}))
+        except Exception as e:
+            log.warning("etf shares %s unavailable: %s", name, e)
+    if not parts:
+        return df
+    shares = pd.concat(parts).dropna().drop_duplicates("code").set_index("code")["shares"]
+    df = df.copy()
+    df["shares"] = df["code"].map(shares) if "shares" not in df else df["shares"].fillna(df["code"].map(shares))
+    return df
+
+
 def collect_snapshots(target: dt.date, force: bool) -> dict:
     results = {}
     fetched_at = now_hkt().isoformat(timespec="seconds")
@@ -153,6 +173,8 @@ def collect_snapshots(target: dt.date, force: bool) -> dict:
             results[dataset] = {"ok": False, "error": str(e)[:500]}
             continue
         df = df.drop_duplicates("code")
+        if dataset == "etf" and df.get("shares", pd.Series(dtype=float)).notna().sum() < 100:
+            df = add_exchange_shares(df, target)
         problems = validate(dataset, df)
         stale = None
         if "data_date" in df and df["data_date"].notna().any():
@@ -195,6 +217,10 @@ def refresh_reference(target: dt.date) -> dict:
             out[name] = {"ok": True, "rows": len(df)}
         except Exception as e:
             out[name] = {"ok": False, "error": str(e)[:300]}
+    try:
+        out["fund_actions"] = adjust.refresh_actions(target)
+    except Exception as e:
+        out["fund_actions"] = {"ok": False, "error": str(e)[:300]}
     return out
 
 
@@ -203,8 +229,14 @@ def refresh_indexes() -> dict:
     out = {}
     for sym in INDEXES:
         try:
-            df = retry(lambda: ak.stock_zh_index_daily(symbol=sym), name=sym)
-            df = df[["date", "close"]].tail(2600)
+            df = retry(lambda: ak.stock_zh_index_daily(symbol=sym), name=sym)[["date", "close"]]
+            if pd.Timestamp(df["date"].iloc[-1]) < pd.Timestamp(now_hkt().date()) - pd.Timedelta(days=10):
+                # Sina stopped updating some CSI indexes (e.g. sh000922 ends in 2019): use CSI's own site.
+                cs = retry(lambda: ak.stock_zh_index_hist_csindex(symbol=sym[2:], start_date="20150101",
+                                                                  end_date=now_hkt().strftime("%Y%m%d")),
+                           attempts=2, name=f"csindex {sym}")
+                df = pd.DataFrame({"date": pd.to_datetime(cs["日期"]).dt.date.astype(str), "close": cs["收盘"]})
+            df = df.tail(2600)
             path = HISTORY / "index" / f"{sym}.csv"
             path.parent.mkdir(parents=True, exist_ok=True)
             df.to_csv(path, index=False)
@@ -216,48 +248,63 @@ def refresh_indexes() -> dict:
 
 # ---------- per-code history for holdings + watchlist (small, diffable CSVs) ----------
 
-def fetch_history(code: str, kind: str, start: str = "20150101") -> pd.DataFrame:
-    """Return date, price where price is back-adjusted close (ETF/LOF) or accumulated NAV (open fund)."""
+def fetch_history(code: str, kind: str) -> pd.DataFrame:
+    """Return date, raw, price, volume, basis for the full history of one fund.
+
+    ETF/LOF: Sina raw close adjusted for splits and dividends (adjust.py), falling back to Eastmoney's
+    back-adjusted close. Open-end funds: unit NAV chained with the daily growth rate (a total return),
+    falling back to accumulated NAV.
+    """
     import akshare as ak
     if kind in {"etf", "lof"}:
-        def em():
-            df = ak.fund_etf_hist_em(symbol=code, period="daily", start_date=start, end_date="20500101", adjust="hfq")
-            return pd.DataFrame({"date": pd.to_datetime(df["日期"]).dt.date.astype(str), "price": _num(df["收盘"]),
-                                 "basis": "hfq_close"})
-
         def sina():
             prefix = "sh" if code[0] in "56" else "sz"
             df = ak.fund_etf_hist_sina(symbol=prefix + code)
-            return pd.DataFrame({"date": df["date"].astype(str), "price": _num(df["close"]), "basis": "raw_close"})
-        _, df = first_ok([("eastmoney", em), ("sina", sina)])
+            df = df.dropna(subset=["close"]).drop_duplicates("date").sort_values("date")
+            df = df[df["close"] > 0]
+            dates = df["date"].astype(str).tolist()
+            price, events = adjust.adjust(dates, df["close"].to_numpy(), adjust.load_actions(code))
+            if events:
+                log.info("%s: applied %d price adjustments", code, len(events))
+            basis = "adj_close" if adjust.ACTIONS_PATH.exists() else "adj_close_no_div"
+            return pd.DataFrame({"date": dates, "raw": df["close"].to_numpy(), "price": price.round(6),
+                                 "volume": _num(df["volume"]).to_numpy(), "basis": basis})
+
+        def em():
+            df = ak.fund_etf_hist_em(symbol=code, period="daily", start_date="20120101", end_date="20500101",
+                                     adjust="hfq")
+            return pd.DataFrame({"date": pd.to_datetime(df["日期"]).dt.date.astype(str), "raw": None,
+                                 "price": _num(df["收盘"]), "volume": _num(df["成交量"]), "basis": "hfq_close"})
+        _, df = first_ok([("sina", sina), ("eastmoney", em)])
     else:
-        def nav():
+        def tr_nav():
+            df = ak.fund_open_fund_info_em(symbol=code, indicator="单位净值走势")
+            df = df.dropna(subset=["单位净值"]).drop_duplicates("净值日期").sort_values("净值日期")
+            nav = _num(df["单位净值"]).to_numpy()
+            return pd.DataFrame({"date": pd.to_datetime(df["净值日期"]).dt.date.astype(str), "raw": nav,
+                                 "price": adjust.total_return_nav(nav, _num(df["日增长率"]).to_numpy()).round(6),
+                                 "volume": None, "basis": "tr_nav"})
+
+        def acc_nav():
             df = ak.fund_open_fund_info_em(symbol=code, indicator="累计净值走势")
-            return pd.DataFrame({"date": pd.to_datetime(df["净值日期"]).dt.date.astype(str),
-                                 "price": _num(df["累计净值"]), "basis": "acc_nav"})
-        _, df = first_ok([("eastmoney", nav)])
+            return pd.DataFrame({"date": pd.to_datetime(df["净值日期"]).dt.date.astype(str), "raw": None,
+                                 "price": _num(df["累计净值"]), "volume": None, "basis": "acc_nav"})
+        _, df = first_ok([("eastmoney", tr_nav), ("eastmoney_acc", acc_nav)])
     return df.dropna(subset=["price"]).drop_duplicates("date").sort_values("date")
 
 
 def update_history(codes: dict[str, str]) -> dict:
+    """Refetch each code's full history (one request per code) so new splits and dividends re-adjust it."""
     out = {}
     for code, kind in codes.items():
         path = HISTORY / "nav" / f"{code}.csv"
         try:
-            if path.exists():
-                old = pd.read_csv(path, dtype={"date": str})
-                start = (dt.date.fromisoformat(old["date"].iloc[-1]) - dt.timedelta(days=10)).strftime("%Y%m%d")
-                new = fetch_history(code, kind, start=start)
-                if not new.empty and new["basis"].iloc[0] != old["basis"].iloc[0]:
-                    new = fetch_history(code, kind)  # basis changed (fallback source): rebuild
-                    df = new
-                else:
-                    df = pd.concat([old, new]).drop_duplicates("date", keep="last").sort_values("date")
-            else:
-                df = fetch_history(code, kind)
+            df = fetch_history(code, kind)
+            if df.empty:
+                raise ValueError("empty history")
             path.parent.mkdir(parents=True, exist_ok=True)
             df.to_csv(path, index=False)
-            out[code] = {"ok": True, "last": df["date"].iloc[-1] if len(df) else None}
+            out[code] = {"ok": True, "last": df["date"].iloc[-1], "basis": df["basis"].iloc[-1]}
         except Exception as e:
             out[code] = {"ok": False, "error": str(e)[:300]}
     return out
@@ -286,7 +333,7 @@ def write_latest(target: dt.date) -> None:
     body = md_table(df) if not df.empty else "_no history yet_"
     (LATEST / "snapshot.md").write_text(
         f"# Latest snapshot (target date {target}, built {now_hkt():%Y-%m-%d %H:%M} HKT)\n\n"
-        "Returns use back-adjusted close (ETF/LOF) or accumulated NAV (open funds).\n\n" + body + "\n",
+        "Returns use split- and dividend-adjusted close (ETF/LOF) or total-return NAV (open funds).\n\n" + body + "\n",
         encoding="utf-8")
 
 
