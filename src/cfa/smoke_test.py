@@ -39,9 +39,20 @@ def main() -> int:
         ("fund names fund_name_em", ak.fund_name_em),
         ("purchase status fund_purchase_em", ak.fund_purchase_em),
         ("index sina stock_zh_index_daily", lambda: ak.stock_zh_index_daily(symbol="sh000300")),
-        ("history etf eastmoney (510300)", lambda: cf.fetch_history("510300", "etf", start="20260101")),
+        ("history etf eastmoney hfq (510300)", lambda: ak.fund_etf_hist_em(symbol="510300", start_date="20260101",
+                                                                          end_date="20500101", adjust="hfq")),
         ("history etf sina (510300)", lambda: ak.fund_etf_hist_sina(symbol="sh510300")),
+        ("history etf adjusted (510880)", lambda: cf.fetch_history("510880", "etf")),
         ("history open fund (110022)", lambda: cf.fetch_history("110022", "open")),
+        ("fund splits fund_cf_em", lambda: ak.fund_cf_em(year=str(dt.date.today().year))),
+        ("fund dividends fund_fh_em", lambda: ak.fund_fh_em(year=str(dt.date.today().year))),
+        ("index csindex (000922)", lambda: ak.stock_zh_index_hist_csindex(symbol="000922", start_date="20260101",
+                                                                         end_date="20500101")),
+        ("valuation stock_index_pe_lg (CSI 300)", lambda: ak.stock_index_pe_lg(symbol="沪深300")),
+        ("bond yields bond_zh_us_rate", lambda: ak.bond_zh_us_rate(start_date="20260101")),
+        ("etf shares sse fund_etf_scale_sse", lambda: ak.fund_etf_scale_sse(
+            date=(dt.date.today() - dt.timedelta(days=1)).strftime("%Y%m%d"))),
+        ("etf shares szse fund_etf_scale_szse", ak.fund_etf_scale_szse),
         ("calendar macro_info_ws", lambda: ak.macro_info_ws(date=(dt.date.today()).strftime("%Y%m%d"))),
     ]
     cfg = load_yaml(CONFIG / "sources.yaml")

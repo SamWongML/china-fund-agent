@@ -115,6 +115,7 @@ def facts(code: str, kind: str, etf_snaps: list[tuple[dt.date, pd.DataFrame]]) -
         h = pd.read_csv(p, dtype={"date": str})
         px = h["price"].astype(float).to_numpy()
         f["last_date"] = h["date"].iloc[-1]
+        f["basis"] = h["basis"].iloc[-1] if "basis" in h else None
 
         def r(n):
             return round((px[-1] / px[-1 - n] - 1) * 100, 2) if len(px) > n else None
@@ -250,7 +251,8 @@ def main() -> int:
     md = [f"# Fact sheets {week} (data as of {asof}, built {now_hkt():%Y-%m-%d %H:%M} HKT)", "",
           f"Data ready: **{ready}** (last good fund snapshot {last_ok}; missing history: {missing_hist or 'none'}).", "",
           "Returns in %: r_1w=5 trading days, r_4w=20, r_12w=60, r_26w=120, r_52w=250. "
-          "Prices are back-adjusted (ETF/LOF) or accumulated NAV (open funds); pnl_pct uses the raw latest price.", "",
+          "Prices are adjusted for splits and dividends (ETF/LOF) or total-return NAV (open funds); basis says which. "
+          "pnl_pct uses the raw latest price.", "",
           "## Holdings", "", tbl(hold_rows), "", "## Candidates (pre-screened, not held)", "", tbl(cand_rows), "",
           "## Theme ETFs", "", tbl(theme_rows), ""]
     (out_dir / "factsheets.md").write_text("\n".join(md), encoding="utf-8")
