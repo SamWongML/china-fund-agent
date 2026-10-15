@@ -26,6 +26,8 @@ themes:
   real_estate:   {etfs: ["512200"], keywords: [房地产, 楼市, 房价, 地产]}
 
 # Candidate screen (weekly build). Score = weighted percentile rank (0-100) of trailing returns within fund type.
+# China evidence: last week's and last month's gains tend to reverse, 3-12 month trends persist, so the short
+# windows carry negative weight (a "skip-month" trend). The signal layer below then re-ranks the survivors.
 screen:
   max_candidates: 20
   max_per_type: 3
@@ -33,4 +35,30 @@ screen:
   min_etf_turnover_cny: 50000000     # 5,000万 daily turnover
   chase_warning_1w_pct: 8            # flag if the last week's gain exceeds this
   exclude_name_keywords: [货币, 理财, 定开, 持有, 封闭, 养老, 港, 美, 纳斯达克, 纳指, 标普, 道琼斯, QDII, 恒生, 日经, 德国, 法国, 印度, 越南, 沙特]
-  weights: {r_1m: 0.2, r_3m: 0.35, r_6m: 0.25, r_1y: 0.2}
+  weights: {r_1w: -0.1, r_1m: -0.1, r_3m: 0.35, r_6m: 0.35, r_1y: 0.3}
+
+# Sector and broad ETFs used for the walk-forward backtest, market breadth and satellite picks (in addition to
+# the theme ETFs above). Codes without history on Sina are skipped and logged.
+research_etfs: ["510050", "510300", "510500", "512100", "159915", "588000", "510880", "515080", "512890",
+                "512480", "159995", "515050", "515880", "159819", "512720", "159852", "515000", "512980",
+                "159869", "512880", "512000", "512070", "512800", "512400", "515220", "515210", "159870",
+                "516950", "512660", "512200", "515030", "516160", "515790", "159611", "512580", "512010",
+                "512170", "512290", "159992", "159883", "159928", "512690", "515170", "159996", "516110",
+                "159865", "159825", "159766", "518880", "511010", "511260"]
+
+# Signal layer (src/cfa/signals.py). Weights apply to 0-100 percentile ranks. The weekly backtest scales them:
+# proven 1x, positive but unproven 0.5x, contrary evidence 0x (journal/signal_health.md).
+signals:
+  weights: {trend_12w: 0.25, trend_26w: 0.2, ma200_gap: 0.1, rev_1w: 0.1, max_20d: 0.1, turnover_surge: 0.1, low_vol: 0.15}
+  crowding: {max_1w_pct: 8, max_1d_pct: 7, max_turnover_x: 2.5}
+  cluster_corr: 0.6     # on market-relative daily returns
+  backtest: {min_funds: 8, min_weeks: 150, t_min: 2.0, cost_per_trade_pct: 0.1}
+
+# Core/satellite frame for the rules-only baseline (src/cfa/portfolio.py). Percentages of the portfolio.
+portfolio:
+  core: ["510880", "510300", "511010", "518880"]   # dividend, CSI 300, government bonds, gold
+  core_pct: 70
+  satellite_pct: 30
+  satellite_slots: 3
+  satellite_min_composite: 60
+  drift_band_pct: 5

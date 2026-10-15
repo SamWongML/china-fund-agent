@@ -12,6 +12,7 @@ import pandas as pd
 
 from .common import CONFIG, HISTORY, JOURNAL, load_holdings, load_universe, load_yaml, log, md_table, write_json
 from .journal import read_all
+from .portfolio import read_baseline
 
 UP_ACTIONS = {"buy", "add", "hold", "watch"}
 
@@ -39,6 +40,7 @@ def first_after(s: pd.Series, when: pd.Timestamp, strict: bool) -> tuple[pd.Time
 
 def grade(rec: dict, bench: pd.Series | None) -> dict:
     out = {k: rec.get(k) for k in ("id", "week", "code", "action", "confidence", "horizon_weeks", "held")}
+    out["override"] = bool(rec.get("override"))
     prices = load_prices(rec["code"])
     decided = pd.Timestamp(rec["ts"][:10])
     if prices is None or (entry := first_after(prices, decided, strict=True)) is None:
@@ -93,21 +95,39 @@ def main() -> dict:
     if not df.empty:
         df.to_csv(JOURNAL / "scorecard.csv", index=False)
     closed = df[df["status"] == "closed"] if not df.empty else df
+    base = pd.DataFrame([grade(r, bench) for r in read_baseline()])
+    base_closed = base[base["status"] == "closed"] if not base.empty else base
+    if not base.empty:
+        base.to_csv(JOURNAL / "rules_baseline_scorecard.csv", index=False)
     pm = portfolio_month(bench, target_monthly)
+    # Brier score: confidence read as the probability the call is right (lower is better; 0.25 = coin flip).
+    brier = None
+    if len(closed):
+        ok = closed["hit"].notna()
+        brier = round(float(((closed.loc[ok, "confidence"].astype(float) - closed.loc[ok, "hit"].astype(float)) ** 2).mean()), 3)
     summary = {
         "decisions": int(len(df)), "closed": int(len(closed)),
         "hit_rate_pct": round(closed["hit"].mean() * 100, 1) if len(closed) else None,
         "avg_excess_pct": round(closed["excess_pct"].mean(), 2) if len(closed) else None,
+        "brier": brier,
+        "rules_closed": int(len(base_closed)),
+        "rules_hit_rate_pct": round(base_closed["hit"].mean() * 100, 1) if len(base_closed) else None,
+        "rules_avg_excess_pct": round(base_closed["excess_pct"].mean(), 2) if len(base_closed) else None,
         "annual_target_pct": annual, **pm, "benchmark": bench_sym,
     }
     lines = ["# Scorecard", "",
              f"Target: {annual:g}%/yr (≈{target_monthly:.2f}%/month). Benchmark: {bench_sym}. "
-             "Entry = first price after the decision date; hit = beat the benchmark (or underperformed it for trim/sell).",
+             "Entry = first price after the decision date; hit = beat the benchmark (or underperformed it for trim/sell). "
+             "rules_* = the mechanical core/satellite calls (journal/rules_baseline.jsonl), graded the same way; "
+             "the advisor should beat them. Brier: lower is better, 0.25 is a coin flip.",
              "", md_table(pd.DataFrame([summary])), ""]
     if len(closed):
         by = closed.groupby("action").agg(n=("id", "count"), hit_rate=("hit", "mean"), avg_excess=("excess_pct", "mean"))
         by = by.round(2).reset_index()
         lines += ["## By action (closed)", "", md_table(by), ""]
+        ov = closed.groupby("override").agg(n=("id", "count"), hit_rate=("hit", "mean"),
+                                            avg_excess=("excess_pct", "mean")).round(2).reset_index()
+        lines += ["## Overrides of the rules-only call (closed)", "", md_table(ov), ""]
         closed = closed.assign(conf_bucket=pd.cut(closed["confidence"].astype(float), [0, .5, .7, .85, 1.0]))
         cal = closed.groupby("conf_bucket", observed=True).agg(n=("id", "count"), hit_rate=("hit", "mean")).round(2)
         lines += ["## Confidence calibration (closed)", "", md_table(cal.reset_index().astype(str)), ""]

@@ -23,6 +23,7 @@ ACTIONS_PATH = REF / "fund_actions.csv"
 JUMP_LO, JUMP_HI = 0.75, 1.30
 ROUND_RATIOS = sorted({float(k) for k in (2, 3, 4, 5, 10, 20)} | {1 / k for k in (2, 3, 4, 5, 10, 20)})
 FIRST_YEAR = 2012
+BACKFILL_YEARS_PER_RUN = 4
 
 
 def load_actions(code: str | None = None) -> pd.DataFrame:
@@ -131,10 +132,11 @@ def _fetch_year(year: int) -> pd.DataFrame:
 
 
 def refresh_actions(today: dt.date) -> dict:
-    """Backfill every year once; afterwards refresh this year and last year on Mondays."""
+    """Backfill missing years (newest first, a few per run to keep the daily job short); afterwards refresh
+    this year and last year on Mondays."""
     old = load_actions()
     have = set(pd.to_datetime(old["date"]).dt.year) if len(old) else set()
-    years = [y for y in range(FIRST_YEAR, today.year + 1) if y not in have]
+    years = sorted((y for y in range(FIRST_YEAR, today.year + 1) if y not in have), reverse=True)[:BACKFILL_YEARS_PER_RUN]
     if today.weekday() == 0 or not len(old):
         years += [today.year - 1, today.year]
     years = sorted(set(years))
