@@ -96,18 +96,24 @@ def first_ok(chain: list[tuple[str, Callable[[], Any]]], attempts: int = 2) -> t
 # ---------- run log and status ----------
 
 def log_run(job: str, ok: bool, **details: Any) -> None:
-    STATE.mkdir(parents=True, exist_ok=True)
+    """Append to state/runs/<job>.jsonl (one file per job so concurrent workflows never conflict)."""
+    path = STATE / "runs" / f"{job}.jsonl"
+    path.parent.mkdir(parents=True, exist_ok=True)
     rec = {"ts": now_hkt().isoformat(timespec="seconds"), "job": job, "ok": ok, **details}
-    with (STATE / "run_log.jsonl").open("a", encoding="utf-8") as f:
+    with path.open("a", encoding="utf-8") as f:
         f.write(json.dumps(rec, ensure_ascii=False, default=str) + "\n")
 
 
+def read_status(section: str) -> dict:
+    return read_json(STATE / "status" / f"{section}.json", {}) or {}
+
+
 def update_status(section: str, payload: dict) -> None:
-    path = STATE / "status.json"
-    status = read_json(path, {}) or {}
-    status.setdefault(section, {}).update(payload)
+    """Merge payload into state/status/<section>.json."""
+    status = read_status(section)
+    status.update(payload)
     status["updated"] = now_hkt().isoformat(timespec="seconds")
-    write_json(path, status)
+    write_json(STATE / "status" / f"{section}.json", status)
 
 
 # ---------- trading calendar ----------

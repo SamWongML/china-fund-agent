@@ -61,7 +61,7 @@ Claude sessions cannot reach Chinese data hosts. Anything that fetches data runs
 - `data/raw/funds/<dataset>/year=/month=/<date>.parquet`: write-once daily snapshots (etf, lof, open, open_rank, exchange_rank)
 - `data/raw/news/YYYY/MM/<date>.jsonl`: deduped headlines and snippets with region, themes and score
 - `data/history/nav/<code>.csv`, `data/history/index/<sym>.csv`: per-code price history for held and watched funds
-- `data/latest/snapshot.md`, `data/manifest.json`, `state/status.json`, `state/run_log.jsonl`
+- `data/latest/snapshot.md`, `data/manifest.json`, `state/status/<job>.json`, `state/runs/<job>.jsonl`, `state/smoke.md`
 
 To run an Actions job on demand from an agent session (workflow_dispatch isn't available there), write the
 current time into `.github/kick/<workflow-name>` and push to main.

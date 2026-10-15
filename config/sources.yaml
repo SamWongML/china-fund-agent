@@ -15,12 +15,11 @@ rss:
   - {name: fed_speeches, region: US, official: true, url: "https://www.federalreserve.gov/feeds/speeches.xml"}
   - {name: ecb_press, region: GLOBAL, official: true, url: "https://www.ecb.europa.eu/rss/press.html"}
   - {name: boj_news, region: GLOBAL, official: true, url: "https://www.boj.or.jp/en/rss/whatsnew.xml"}
-  - {name: bls_latest, region: US, official: true, url: "https://www.bls.gov/feed/bls_latest.rss"}
   - {name: cnbc_markets, region: US, url: "https://www.cnbc.com/id/100003114/device/rss/rss.html"}
   - {name: cnbc_economy, region: US, url: "https://www.cnbc.com/id/20910258/device/rss/rss.html"}
   - {name: marketwatch_top, region: US, url: "https://feeds.content.dowjones.io/public/rss/mw_topstories"}
   - {name: bloomberg_markets, region: GLOBAL, url: "https://feeds.bloomberg.com/markets/news.rss"}
-  - {name: gnews_reuters_business, region: GLOBAL, url: "https://news.google.com/rss/search?q=when:1d+allinurl:reuters.com/business&hl=en-US&gl=US&ceid=US:en"}
+  - {name: gnews_reuters_business, region: GLOBAL, url: "https://news.google.com/rss/search?q=site:reuters.com+markets+when:1d&hl=en-US&gl=US&ceid=US:en"}
   - {name: gnews_china_economy, region: CN, url: "https://news.google.com/rss/search?q=China+economy+OR+PBOC+OR+yuan+when:1d&hl=en-US&gl=US&ceid=US:en"}
   - {name: gnews_cn_regulators, region: CN, official: true, url: "https://news.google.com/rss/search?q=site:pbc.gov.cn+OR+site:csrc.gov.cn+OR+site:ndrc.gov.cn+OR+site:mof.gov.cn+OR+site:stats.gov.cn+when:2d&hl=zh-CN&gl=CN&ceid=CN:zh-Hans"}
 

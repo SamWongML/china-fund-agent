@@ -19,7 +19,7 @@ from . import scorecard
 from .collect_funds import snapshot_path, update_history
 from .collect_news import load_day
 from .common import (CONFIG, HISTORY, NEWS, RAW, REF, WEEKLY, guess_type, iso_week_label, last_trading_day,
-                     load_holdings, load_universe, load_yaml, log, log_run, md_table, now_hkt, read_json, retry,
+                     load_holdings, load_universe, load_yaml, log, log_run, md_table, now_hkt, read_status, retry,
                      today_hkt, update_status, watch_codes, write_json, STATE)
 
 
@@ -227,7 +227,7 @@ def main() -> int:
     (out_dir / "news_rollup.md").write_text(rollup_md, encoding="utf-8")
     score = scorecard.main()
 
-    funds_status = (read_json(STATE / "status.json", {}) or {}).get("funds", {})
+    funds_status = read_status("funds")
     last_ok = funds_status.get("last_ok_date")
     stale_days = (asof - dt.date.fromisoformat(last_ok)).days if last_ok else None
     ready = bool(last_ok) and stale_days is not None and stale_days <= 3
