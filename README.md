@@ -30,6 +30,24 @@ A personal research loop for China onshore ETFs, LOFs and public funds.
 Target: 12% a year (≈0.95%/month), with 15% as a stretch goal, judged on a rolling 12 months. These are
 research signals from public data, not financial advice.
 
+## What the briefs look like
+
+Each scheduled task overwrites one HTML page in `briefs/`; [`briefs/index.html`](briefs/index.html) links them.
+Screenshots below are from the first runs (Oct 14 to 16, 2026; the weekly one is the W42 preview).
+
+| Morning brief (weekdays 08:22 HKT) | Daily news digest (07:07 HKT) |
+|---|---|
+| [![Morning brief](docs/screenshots/morning.png)](briefs/morning.html) | [![News digest](docs/screenshots/news.png)](briefs/news.html) |
+| **Sunday advice (08:07 HKT)** | **Theme scout (1st Saturday of the month)** |
+| [![Sunday advice](docs/screenshots/weekly.png)](briefs/weekly.html) | [![Theme scout](docs/screenshots/themes.png)](briefs/themes.html) |
+
+<p>
+  <a href="briefs/index.html"><img src="docs/screenshots/index.png" alt="Index of all briefs" width="58%"></a>
+  <img src="docs/screenshots/weekly-phone-dark.png" alt="Sunday advice on a phone in dark mode" width="24%">
+</p>
+
+The index page, and the Sunday advice on a phone in dark mode.
+
 ## What you maintain
 
 1. **`portfolio/holdings.yaml`**: what you own. Replace `holdings: []` with your entries, using the
