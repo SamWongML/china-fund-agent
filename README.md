@@ -19,6 +19,10 @@ A personal research loop for China onshore ETFs, LOFs and public funds.
   (`journal/signal_health.md`), labels the market regime, and proposes core/satellite target weights. Its
   mechanical "rules-only" calls are graded alongside Claude's, so you can see whether Claude's judgement adds
   anything.
+- **HTML briefs**: after each scheduled run, `briefs/<task>.html` (morning, news, weekly, themes) is
+  re-rendered from that run's Markdown by a script, overwriting the previous one. Open `briefs/index.html`,
+  or https://samwongml.github.io/china-fund-agent/ once GitHub Pages is on (Settings > Pages > Source:
+  GitHub Actions).
 - Every call goes into an append-only journal and is graded later against what actually happened
   (`journal/scorecard_summary.md`). After a few months, that shows whether the advice beats simply
   holding the CSI 300.

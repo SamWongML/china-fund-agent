@@ -26,5 +26,7 @@ Goal: a digest of no more than 1,500 words that a Sunday advisor can skim to see
    - Describe what happened; don't forecast prices.
    - Merge repeated stories. Write in English; keep Chinese names of policies and institutions in brackets
      when useful.
-5. `git add news/daily && git commit -m "news digest <D>" && git push origin HEAD:main`.
+5. Render the HTML brief from the newest digest you wrote (don't open the HTML):
+   `PYTHONPATH=src python3 -m cfa.brief news --date <D>`
+6. `git add news/daily briefs && git commit -m "news digest <D>" && git push origin HEAD:main`.
    If the push is rejected, pull with rebase and push again.

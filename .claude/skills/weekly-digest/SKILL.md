@@ -8,8 +8,8 @@ description: Sunday advisory. Give Buy/Sell calls with a percentage on holdings,
 ## 1. Orient
 - `git pull -q origin main`, then `pip install -q pyyaml pandas` if they're missing.
 - `WEEK=$(TZ=Asia/Hong_Kong date +%G-W%V)`. If `weekly/$WEEK/inputs.json` doesn't exist, the Actions build
-  didn't run. Write `weekly/$WEEK/digest.md` with only a `## Data gap` section explaining that, then commit,
-  push and stop.
+  didn't run. Write `weekly/$WEEK/digest.md` with only a `## Data gap` section explaining that, run
+  `PYTHONPATH=src python3 -m cfa.brief weekly --week $WEEK`, then commit (with `briefs`), push and stop.
 - `echo $WEEK > state/.digest_in_progress`. This arms the Stop hook, which runs `cfa.check_digest`.
 
 ## 2. Read, and only these files
@@ -92,4 +92,6 @@ from public data, not financial advice."
   the user. Never edit the rules.
 - `cp weekly/$WEEK/digest.md reports/latest.md`
 - `PYTHONPATH=src python3 -m cfa.check_digest --week $WEEK`, and fix everything it reports.
-- `git add weekly reports journal state && git commit -m "weekly digest $WEEK" && git push origin HEAD:main`
+- `PYTHONPATH=src python3 -m cfa.brief weekly --week $WEEK` renders `briefs/weekly.html` (also for a Data gap
+  digest). Don't open the HTML.
+- `git add weekly reports journal state briefs && git commit -m "weekly digest $WEEK" && git push origin HEAD:main`
