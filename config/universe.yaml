@@ -80,3 +80,8 @@ watch_themes:
   max_active: 8
   exclude_name_keywords: [港, 恒生, 纳斯达克, 纳指, 标普, 道琼斯, 日经, 德国, 法国, 中韩, 沙特, 越南, 印度, 亚太, 债, 货币,
                           日利, 添益, 短融]
+
+# HTML briefs (src/cfa/brief.py -> briefs/*.html). up_color: red follows the mainland convention (red = up,
+# green = down); set green for the Hong Kong / US convention. Arrows always show the direction.
+briefs:
+  up_color: red

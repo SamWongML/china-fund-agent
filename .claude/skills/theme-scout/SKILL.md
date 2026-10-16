@@ -43,6 +43,7 @@ the scorecard grades themes by id). Rules:
 - Edit `watchlist/themes.yaml`. Run `PYTHONPATH=src python3 -m cfa.themes check` and fix what it reports.
 - Write `research/themes/YYYY-MM.md` (60 lines or fewer): what changed and why, one paragraph per theme added,
   removed or re-staged, with source links; then one line per unchanged theme.
-- `git add watchlist research/themes && git commit -m "theme scout YYYY-MM" && git push origin HEAD:main`
+- `PYTHONPATH=src python3 -m cfa.brief themes --month YYYY-MM` renders `briefs/themes.html`. Don't open it.
+- `git add watchlist research/themes briefs && git commit -m "theme scout YYYY-MM" && git push origin HEAD:main`
 - Reply with what changed on the watchlist in a few lines. End with: "Research signals from public data, not
   financial advice."

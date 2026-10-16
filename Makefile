@@ -2,7 +2,7 @@ PY ?= python3
 export PYTHONPATH := src
 export TZ := Asia/Hong_Kong
 
-.PHONY: install smoke funds news news-prep weekly-build scorecard check-digest maintenance test
+.PHONY: install smoke funds news news-prep weekly-build scorecard check-digest maintenance test brief
 
 install:      ; $(PY) -m pip install -r requirements.txt
 smoke:        ; $(PY) -m cfa.smoke_test
@@ -14,3 +14,4 @@ scorecard:    ; $(PY) -m cfa.scorecard
 check-digest: ; $(PY) -m cfa.check_digest
 maintenance:  ; $(PY) -m cfa.maintenance
 test:         ; $(PY) -m pytest -q tests
+brief:        ; $(PY) -m cfa.brief $(T)    # make brief T=news|morning|weekly|themes

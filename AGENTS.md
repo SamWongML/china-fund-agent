@@ -26,6 +26,8 @@ Output is research signals from public data, not licensed financial advice.
 | `journal/scorecard*` | `cfa.scorecard` | read |
 | `journal/signal_health.{md,json}` | `cfa.backtest` (in the weekly build) | read |
 | `journal/rules_baseline.jsonl` | `cfa.portfolio` (in the weekly build) | read |
+| `briefs/morning.md` | weekday morning brief (Claude) | write (overwrite each run) |
+| `briefs/*.html`, `briefs/manifest.json` | `cfa.brief` | run the command; never write or open the HTML |
 
 ## Rules for agents
 
@@ -42,6 +44,14 @@ Output is research signals from public data, not licensed financial advice.
    short-holding redemption penalties on open-end funds. The weekly rules-only call is the default for each
    holding; departing from it needs a logged `override_reason`. Never add to or buy a fund flagged `crowded`.
 6. Commit to `main` with a clear message and push. Never rewrite history.
+
+## HTML briefs
+
+Every scheduled task ends with `python -m cfa.brief <news|morning|weekly|themes>`, which renders the Markdown it
+already wrote into `briefs/<task>.html` (fixed path, overwritten each run) and refreshes `briefs/index.html`.
+The script adds the price tables, sparklines and p_up bars from repo data, so the agent spends no tokens on HTML.
+Commit `briefs/` with the task's other files. Published at https://samwongml.github.io/china-fund-agent/ once
+Pages is on.
 
 ## Jobs
 
@@ -60,7 +70,7 @@ Claude sessions cannot reach Chinese data hosts. Anything that fetches data runs
 
 ## Commands
 
-`make install | smoke | funds | news | news-prep | weekly-build | scorecard | check-digest | test`
+`make install | smoke | funds | news | news-prep | weekly-build | scorecard | check-digest | test | brief T=<task>`
 (all set `PYTHONPATH=src` and `TZ=Asia/Hong_Kong`).
 
 ## Layout
