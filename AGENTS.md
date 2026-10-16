@@ -52,7 +52,7 @@ Output is research signals from public data, not licensed financial advice.
 | Daily news digest | Claude scheduled task, skill `news-digest` | 07:07 daily |
 | Weekly build (`cfa.weekly_build`) | Actions `weekly-build.yml` | Sun 06:17 |
 | Weekly advisory | Claude scheduled task, skill `weekly-digest` | Sun 08:07 |
-| Theme scout | Claude, skill `theme-scout` (monthly; not scheduled yet) | 1st Sat of the month |
+| Theme scout | Claude scheduled task, skill `theme-scout` | 1st Sat of the month 09:58 |
 | Maintenance (`cfa.maintenance`) | Actions `maintenance.yml` | 1st of month 10:23 |
 | Source smoke test (`cfa.smoke_test`) | Actions `smoke.yml` | on demand |
 
