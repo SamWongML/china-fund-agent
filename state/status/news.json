@@ -1,5 +1,5 @@
 {
-  "last_run": "2026-10-19T01:22:49+08:00",
+  "last_run": "2026-10-19T03:25:01+08:00",
   "ok": true,
   "sources": {
     "eastmoney_7x24": {
@@ -56,18 +56,18 @@
     },
     "gnews_reuters_business": {
       "ok": true,
-      "n": 82
+      "n": 81
     },
     "gnews_china_economy": {
       "ok": true,
-      "n": 30
+      "n": 31
     },
     "gnews_cn_regulators": {
       "ok": true,
-      "n": 21
+      "n": 18
     }
   },
-  "added": 113,
-  "merged": 16,
-  "updated": "2026-10-19T01:22:49+08:00"
+  "added": 52,
+  "merged": 9,
+  "updated": "2026-10-19T03:25:01+08:00"
 }
