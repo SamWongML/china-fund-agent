@@ -7,11 +7,11 @@
     "bytes": 12005
   },
   "morning": {
-    "title": "Morning brief Tue Oct 20",
-    "subtitle": "2026-10-20 · prices as of 2026-10-19 close",
+    "title": "Morning brief Wed Oct 21",
+    "subtitle": "2026-10-21 · prices as of 2026-10-20 close",
     "source": "briefs/morning.md",
-    "generated": "2026-10-20 08:23",
-    "bytes": 18144
+    "generated": "2026-10-21 08:23",
+    "bytes": 18377
   },
   "themes": {
     "title": "Theme scout 2026-10 (seed)",
