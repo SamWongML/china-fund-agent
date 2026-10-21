@@ -1,5 +1,5 @@
 {
-  "last_run": "2026-10-21T19:47:48+08:00",
+  "last_run": "2026-10-22T01:11:49+08:00",
   "ok": true,
   "sources": {
     "eastmoney_7x24": {
@@ -60,14 +60,14 @@
     },
     "gnews_china_economy": {
       "ok": true,
-      "n": 91
+      "n": 89
     },
     "gnews_cn_regulators": {
       "ok": true,
-      "n": 52
+      "n": 43
     }
   },
-  "added": 395,
-  "merged": 20,
-  "updated": "2026-10-21T19:47:48+08:00"
+  "added": 309,
+  "merged": 40,
+  "updated": "2026-10-22T01:11:49+08:00"
 }
