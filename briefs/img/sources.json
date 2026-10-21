@@ -1,0 +1,29 @@
+{
+  "morning": {
+    "sha": "468c5237e3548b09a9fb72175e533411182ffe7422c47244bd5ab1b241bebc38",
+    "images": [
+      "morning-1.png"
+    ]
+  },
+  "news": {
+    "sha": "3df069857c309b8bb49b7aa7b3fe5c0a2a26c07d25476af081641a50598f9bb4",
+    "images": [
+      "news-1.png",
+      "news-2.png"
+    ]
+  },
+  "weekly": {
+    "sha": "f097ea9d947f4b59194033ce79af10b035270de9e291390d43c0dcd91717a3f9",
+    "images": [
+      "weekly-1.png",
+      "weekly-2.png",
+      "weekly-3.png"
+    ]
+  },
+  "themes": {
+    "sha": "940c356d3457db92c600218329d456b4cd2456fcfb15e23c4081876e4d851e2c",
+    "images": [
+      "themes-1.png"
+    ]
+  }
+}

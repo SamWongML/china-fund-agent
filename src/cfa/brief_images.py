@@ -4,18 +4,19 @@ GitHub shows a folder's README.md with its images inline, so opening briefs/ in 
 Runs on Actions (`brief-images.yml`) after any push that changes briefs/*.html; needs Playwright + Chromium,
 which only that workflow installs.
 
-    python -m cfa.brief_images            # briefs/*.html -> briefs/img/<task>-<n>.png + briefs/README.md
+    python -m cfa.brief_images [--all]    # briefs/*.html -> briefs/img/<task>-<n>.png + briefs/README.md
 
-Every run re-shoots every brief into the same fixed file names, so briefs/img/ always holds the latest pages.
-Long pages are cut into several images, since very tall screenshots render blank in some viewers.
+Long pages are cut into several images, since very tall screenshots render blank in some viewers. Only briefs
+whose HTML changed since the last run are re-shot (hashes in briefs/img/sources.json), to keep the repo small.
 """
 from __future__ import annotations
 
 import argparse
+import hashlib
 import os
 
 from .brief import BRIEFS, REPO_URL, TITLES, esc
-from .common import read_json
+from .common import read_json, write_json
 
 IMG = BRIEFS / "img"
 ORDER = ("morning", "news", "weekly", "themes")
@@ -30,6 +31,8 @@ def shoot(tasks: list[str]) -> dict[str, list[str]]:
 
     IMG.mkdir(parents=True, exist_ok=True)
     out: dict[str, list[str]] = {}
+    if not tasks:
+        return out
     with sync_playwright() as p:
         browser = p.chromium.launch(executable_path=os.environ.get("CHROMIUM_PATH") or None)
         page = browser.new_page(viewport={"width": WIDTH, "height": 900}, device_scale_factor=SCALE,
@@ -49,12 +52,11 @@ def shoot(tasks: list[str]) -> dict[str, list[str]]:
                 page.screenshot(path=str(IMG / name), full_page=True,
                                 clip={"x": 0, "y": top, "width": width, "height": min(SLICE, height - top)})
                 names.append(name)
+            for f in IMG.glob(f"{task}-*.png"):
+                if f.name not in names:
+                    f.unlink()
             out[task] = names
         browser.close()
-    keep = {n for names in out.values() for n in names}
-    for f in IMG.glob("*"):
-        if f.name not in keep:
-            f.unlink()
     return out
 
 
@@ -74,11 +76,19 @@ def readme(images: dict[str, list[str]]) -> str:
 
 
 def main() -> int:
-    argparse.ArgumentParser(description=__doc__.splitlines()[0]).parse_args()
-    tasks = [t for t in ORDER if (BRIEFS / f"{t}.html").exists()]
-    images = shoot(tasks)
-    (BRIEFS / "README.md").write_text(readme(images), encoding="utf-8")
-    print(f"brief images: {sum(len(v) for v in images.values())} png for {', '.join(tasks) or 'no briefs'}")
+    ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    ap.add_argument("--all", action="store_true", help="re-shoot every brief, changed or not")
+    a = ap.parse_args()
+    state = read_json(IMG / "sources.json", {}) or {}
+    sha = {t: hashlib.sha256((BRIEFS / f"{t}.html").read_bytes()).hexdigest()
+           for t in ORDER if (BRIEFS / f"{t}.html").exists()}
+    todo = [t for t in sha if a.all or state.get(t, {}).get("sha") != sha[t]
+            or not all((IMG / n).exists() for n in state[t].get("images", []))]
+    shot = shoot(todo)
+    state = {t: {"sha": sha[t], "images": shot[t] if t in shot else state[t]["images"]} for t in sha}
+    write_json(IMG / "sources.json", state)
+    (BRIEFS / "README.md").write_text(readme({t: v["images"] for t, v in state.items()}), encoding="utf-8")
+    print(f"brief images: re-shot {', '.join(todo) or 'nothing'}; {len(state)} briefs in briefs/README.md")
     return 0
 
 
