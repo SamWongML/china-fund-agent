@@ -22,7 +22,8 @@ A personal research loop for China onshore ETFs, LOFs and public funds.
 - **HTML briefs**: after each scheduled run, `briefs/<task>.html` (morning, news, weekly, themes) is
   re-rendered from that run's Markdown by a script, overwriting the previous one. Open `briefs/index.html`,
   or https://samwongml.github.io/china-fund-agent/ once GitHub Pages is on (Settings > Pages > Source:
-  GitHub Actions).
+  GitHub Actions). On a phone, open the [`briefs/`](briefs/) folder in the GitHub app: a workflow screenshots
+  each brief into `briefs/img/` and lists them in `briefs/README.md`.
 - Every call goes into an append-only journal and is graded later against what actually happened
   (`journal/scorecard_summary.md`). After a few months, that shows whether the advice beats simply
   holding the CSI 300.

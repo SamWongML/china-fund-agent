@@ -28,6 +28,7 @@ Output is research signals from public data, not licensed financial advice.
 | `journal/rules_baseline.jsonl` | `cfa.portfolio` (in the weekly build) | read |
 | `briefs/morning.md` | weekday morning brief (Claude) | write (overwrite each run) |
 | `briefs/*.html`, `briefs/manifest.json` | `cfa.brief` | run the command; never write or open the HTML |
+| `briefs/img/*`, `briefs/README.md` | `cfa.brief_images` (Actions, after briefs change) | read; never hand-edit |
 
 ## Rules for agents
 
@@ -65,6 +66,7 @@ Pages is on.
 | Theme scout | Claude scheduled task, skill `theme-scout` | 1st Sat of the month 09:58 |
 | Maintenance (`cfa.maintenance`) | Actions `maintenance.yml` | 1st of month 10:23 |
 | Source smoke test (`cfa.smoke_test`) | Actions `smoke.yml` | on demand |
+| Brief screenshots for the mobile app (`cfa.brief_images`) | Actions `brief-images.yml` | on push of `briefs/*.html` |
 
 Claude sessions cannot reach Chinese data hosts. Anything that fetches data runs on Actions.
 

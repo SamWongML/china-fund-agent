@@ -1,0 +1,31 @@
+name: brief-images
+# Screenshots briefs/*.html into briefs/img/*.png and writes briefs/README.md, so the briefs read in the GitHub
+# mobile app (open the briefs/ folder). Only briefs whose HTML changed are re-shot.
+on:
+  push:
+    branches: [main]
+    paths: ["briefs/*.html", "src/cfa/brief_images.py", ".github/kick/brief-images"]
+  workflow_dispatch:
+    inputs:
+      all: {description: "re-shoot every brief", type: boolean, default: false}
+concurrency: {group: brief-images, cancel-in-progress: false}
+permissions:
+  contents: write
+env:
+  PYTHONPATH: src
+  TZ: Asia/Hong_Kong
+jobs:
+  shoot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -q -r requirements.txt playwright==1.64.0
+      - run: sudo apt-get install -y -q fonts-noto-cjk >/dev/null && python -m playwright install --with-deps chromium
+      - run: git pull -q --rebase origin main   # pick up briefs pushed while this job queued
+      - run: python -m cfa.brief_images ${{ inputs.all && '--all' || '' }}
+      - run: scripts/commit_push.sh "brief images $(date +'%F %H:%M')" briefs/img briefs/README.md

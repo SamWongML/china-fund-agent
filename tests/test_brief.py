@@ -91,3 +91,13 @@ def test_tasks_write_fixed_paths_and_index(root):
     assert all(f'href="{t}.html"' in idx for t in ("news", "morning", "weekly", "themes"))
     man = json.loads((root / "briefs" / "manifest.json").read_text())
     assert set(man) == {"news", "morning", "weekly", "themes"}
+
+
+def test_brief_images_readme_lists_each_brief_with_its_slices(tmp_path, monkeypatch):
+    from cfa import brief_images
+    monkeypatch.setattr(brief_images, "BRIEFS", tmp_path)
+    (tmp_path / "manifest.json").write_text(json.dumps(
+        {"weekly": {"title": "Weekly digest 2026-W42", "subtitle": "Week 2026-W42", "generated": "2026-10-18 08:10"}}))
+    md = brief_images.readme({"weekly": ["weekly-1.png", "weekly-2.png"]})
+    assert "## Sunday advice: Weekly digest 2026-W42" in md and "updated 2026-10-18 08:10 HKT" in md
+    assert "![Sunday advice part 1](img/weekly-1.png)" in md and "![Sunday advice part 2](img/weekly-2.png)" in md
