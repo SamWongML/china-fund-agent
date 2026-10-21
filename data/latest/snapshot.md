@@ -1,4 +1,4 @@
-# Latest snapshot (target date 2026-10-20, built 2026-10-21 03:20 HKT)
+# Latest snapshot (target date 2026-10-20, built 2026-10-21 10:04 HKT)
 
 Returns use split- and dividend-adjusted close (ETF/LOF) or total-return NAV (open funds).
 
