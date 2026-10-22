@@ -1,15 +1,15 @@
-# Morning brief Wed Oct 21
+# Morning brief Thu Oct 22
 
-Bottom line: chip and AI ETFs bounced on Tuesday while banks, brokers and dividend funds gave back gains, with Jensen Huang's GTC Berlin talk the main event today.
+Bottom line: the broad market slipped on Wednesday, with new-energy ETFs falling hardest while AI and chip ETFs edged up; the Bank of Korea and US jobless claims are today's events.
 
 ## News
-1. **The PBOC announced a package at the Financial Street Forum on Monday:** a liquidity tool for large redemptions at non-bank institutions, wider access to the standing lending facility, a phase-out of the benchmark deposit and lending rates, and links between the interbank and exchange bond markets. It supports banks, brokers and bond ETFs.
-2. **China's Q3 growth came in at 4.5%, beating estimates,** on surging exports. Retail sales rose only 1.1%, and property investment fell 20.6%.
-3. **The CSRC backed broker mergers** and approved the first active ETFs. It also plans to add RMB share counters and REITs to Stock Connect.
+1. **The PBOC began nine days of overnight reverse repos** (Oct 21 to Nov 2), capped at 1 trillion yuan a day. It is the first step toward an overnight policy rate and a liquidity positive for bond ETFs. The LPR was unchanged for a 17th month.
+2. **Chinese tech firms ordered more than 3 million Nvidia RTX PRO 5500 cards,** worth over 35 billion dollars, and US chip stocks rebounded. Korean memory stocks kept falling, though.
+3. **The first 18 active ETFs were approved, and a national data group (国家数据集团) is being set up.** Former PBOC Governor 周小川 warned that policy tools are needed against turmoil from failed AI investments.
 
 ## Watch
-- Jensen Huang speaks at GTC Berlin, Korea's 20-day exports come out, and the World Intelligent Connected Vehicles Conference opens.
-- UK September CPI is expected at 3.3.
+- The Bank of Korea rate decision and 宇树科技's World Physical AI conference.
+- US initial jobless claims (expected 20.0 ten-thousands).
 
 ## Data health
-- The Oct 20 news input hasn't been built yet. The Oct 19 input also arrived late (09:06 HKT the next day), so the news pipeline is running about a day behind.
+- The news input is running about a day late. The Oct 21 input isn't built yet, so the news above is from Oct 20.
