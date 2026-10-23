@@ -9,9 +9,9 @@ Screenshots of the latest HTML brief of each scheduled task, for the GitHub mobi
 
 <a id="morning"></a>
 
-## Morning brief: Morning brief Thu Oct 22
+## Morning brief: Morning brief Fri Oct 23
 
-2026-10-22 · prices as of 2026-10-21 close · updated 2026-10-22 08:23 HKT · [HTML](morning.html)
+2026-10-23 · prices as of 2026-10-22 close · updated 2026-10-23 10:21 HKT · [HTML](morning.html)
 
 ![Morning brief part 1](img/morning-1.png)
 
@@ -19,7 +19,7 @@ Screenshots of the latest HTML brief of each scheduled task, for the GitHub mobi
 
 ## Daily news digest: News digest 2026-10-21
 
-News for 2026-10-21 · for the Sunday advisor · updated 2026-10-23 07:09 HKT · [HTML](news.html)
+News for 2026-10-21 · for the Sunday advisor · updated 2026-10-23 10:21 HKT · [HTML](news.html)
 
 ![Daily news digest part 1](img/news-1.png)
 ![Daily news digest part 2](img/news-2.png)
@@ -28,17 +28,16 @@ News for 2026-10-21 · for the Sunday advisor · updated 2026-10-23 07:09 HKT ·
 
 ## Sunday advice: Weekly digest 2026-W42 (data as of 2026-10-16)
 
-Week 2026-W42 · data as of 2026-10-16 · updated 2026-10-18 08:10 HKT · [HTML](weekly.html)
+Week 2026-W42 · data as of 2026-10-16 · updated 2026-10-23 10:21 HKT · [HTML](weekly.html)
 
 ![Sunday advice part 1](img/weekly-1.png)
 ![Sunday advice part 2](img/weekly-2.png)
-![Sunday advice part 3](img/weekly-3.png)
 
 <a id="themes"></a>
 
 ## Theme scout: Theme scout 2026-10 (seed)
 
-Theme scout 2026-10 · updated 2026-10-16 20:38 HKT · [HTML](themes.html)
+Theme scout 2026-10 · updated 2026-10-23 10:21 HKT · [HTML](themes.html)
 
 ![Theme scout part 1](img/themes-1.png)
 
