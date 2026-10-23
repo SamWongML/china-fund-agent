@@ -3,28 +3,28 @@
     "title": "News digest 2026-10-21",
     "subtitle": "News for 2026-10-21 · for the Sunday advisor",
     "source": "news/daily/2026-10-21.md",
-    "generated": "2026-10-23 07:09",
-    "bytes": 10578
+    "generated": "2026-10-23 10:21",
+    "bytes": 10614
   },
   "morning": {
     "title": "Morning brief Fri Oct 23",
     "subtitle": "2026-10-23 · prices as of 2026-10-22 close",
     "source": "briefs/morning.md",
-    "generated": "2026-10-23 08:23",
-    "bytes": 18263
+    "generated": "2026-10-23 10:21",
+    "bytes": 18431
   },
   "themes": {
     "title": "Theme scout 2026-10 (seed)",
     "subtitle": "Theme scout 2026-10",
     "source": "research/themes/2026-10.md",
-    "generated": "2026-10-16 20:38",
-    "bytes": 10750
+    "generated": "2026-10-23 10:21",
+    "bytes": 10800
   },
   "weekly": {
     "title": "Weekly digest 2026-W42 (data as of 2026-10-16)",
     "subtitle": "Week 2026-W42 · data as of 2026-10-16",
     "source": "weekly/2026-W42/digest.md",
-    "generated": "2026-10-18 08:10",
-    "bytes": 45657
+    "generated": "2026-10-23 10:21",
+    "bytes": 46006
   }
 }
