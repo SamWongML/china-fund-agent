@@ -68,7 +68,7 @@ table{border-collapse:collapse;width:100%%;font-size:13.5px;font-variant-numeric
 th{text-align:left;font-weight:600;color:var(--muted);font-size:12px;border-bottom:1px solid var(--ink);
 padding:4px 8px;white-space:nowrap}
 td{padding:5px 8px;border-bottom:1px solid var(--rule);vertical-align:top}
-td.n,th.n,td.nw{text-align:right;white-space:nowrap}td.nw{text-align:left}
+td.n,th.n,td.nw,td.nm{text-align:right;white-space:nowrap}td.nw,td.nm{text-align:left}th.w{white-space:normal}
 .up{color:var(--up)}.down{color:var(--down)}.flat{color:var(--flat)}
 .badge{display:inline-block;min-width:46px;text-align:center;font-size:12px;font-weight:600;border-radius:4px;
 padding:1px 6px;color:#fff;white-space:nowrap}
@@ -280,6 +280,8 @@ def render_table(lines: list[str]) -> str:
         out.append("<tr>")
         for i, c in enumerate(r):
             cls, cell = table_cell(c, head[i] if i < len(head) else "")
+            if not cls and i < len(head) and head[i].strip().lower() in {"name", "fund", "product"}:
+                cls = "nm"   # fund names: one line, the table scrolls instead
             out.append(f'<td class="{cls}">{cell}</td>')
         out.append("</tr>")
     out.append("</tbody></table></div>")
@@ -449,7 +451,7 @@ def moves_table(rows: list[dict], label: dict[str, str]) -> str:
            '<th class="n">5 days</th><th class="n">20 days</th><th>60-day trend</th></tr></thead><tbody>']
     for r in rows:
         c = r["code"]
-        out.append(f'<tr><td class="meta">{esc(label.get(c, ""))}</td><td>{esc(c)}</td><td>{esc(nm.get(c, ""))}</td>'
+        out.append(f'<tr><td class="meta">{esc(label.get(c, ""))}</td><td>{esc(c)}</td><td class="nm">{esc(nm.get(c, ""))}</td>'
                    f'<td class="n">{signed(r.get("r_1d%"))}</td><td class="n">{signed(r.get("r_5d%"))}</td>'
                    f'<td class="n">{signed(r.get("r_20d%"))}</td><td>{sparkline(c)}</td></tr>')
     out.append("</tbody></table></div>")
@@ -518,12 +520,12 @@ def calls_section(rows: list[dict], floor: float) -> str:
         groups.setdefault(r["group"], []).append(r)
     order = sorted(groups, key=lambda g: (g != "Holdings", g == "New picks", g))
     out = ['<section><h2>Every call at a glance</h2><div class="tw"><table><thead><tr><th>group</th><th>code</th>'
-           '<th>name</th><th>call</th><th class="n">chance it beats the CSI 300</th><th>logged</th>'
+           '<th>name</th><th>call</th><th class="n w">chance it beats the CSI 300</th><th>logged</th>'
            '<th>60-day trend</th></tr></thead><tbody>']
     for g in order:
         for r in sorted(groups[g], key=lambda x: -x["p_up"]):
             act = esc(r["action"]) + (" · override" if r["override"] else "")
-            out.append(f'<tr><td class="meta">{esc(g)}</td><td>{esc(r["code"])}</td><td>{esc(r["name"])}</td>'
+            out.append(f'<tr><td class="meta">{esc(g)}</td><td>{esc(r["code"])}</td><td class="nm">{esc(r["name"])}</td>'
                        f'<td>{badge(r["view"], str(r["pct"]))}</td>'
                        f'<td class="n">{r["p_up"] * 100:.0f}%{pbar(r["p_up"], floor)}</td><td class="meta">{act}</td>'
                        f'<td>{sparkline(r["code"])}</td></tr>')
@@ -572,8 +574,8 @@ def themes_page(month: str | None) -> Path:
     status_n = {s: sum(t.get("status") == s for t in wl) for s in ("active", "watch-only", "retired")}
     pre = kpis([(f"{s} themes", str(n)) for s, n in status_n.items()])
     rows = ['<section><h2>Watchlist now</h2><div class="tw"><table><thead><tr><th>theme</th><th>status</th>'
-            '<th>stage</th><th class="n">news this week</th><th class="n">index families</th>'
-            '<th class="n">launched in 6 months</th><th class="n">crowded products</th><th>review by</th>'
+            '<th>stage</th><th class="n w">news this week</th><th class="n w">index families</th>'
+            '<th class="n w">launched in 6 months</th><th class="n w">crowded products</th><th>review by</th>'
             "</tr></thead><tbody>"]
     for t in wl:
         s = stats.get(t.get("id"), {})

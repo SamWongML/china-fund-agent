@@ -6,8 +6,10 @@ which only that workflow installs.
 
     python -m cfa.brief_images [--all]    # briefs/*.html -> briefs/img/<task>-<n>.png + briefs/README.md
 
-Long pages are cut into several images, since very tall screenshots render blank in some viewers. Only briefs
-whose HTML changed since the last run are re-shot (hashes in briefs/img/sources.json), to keep the repo small.
+Long pages are cut into several images at block boundaries, since very tall screenshots render blank in some
+viewers. The page is widened until every table fits inside its card, so nothing spills past a card edge. Only
+briefs whose HTML changed since the last run are re-shot (hashes in briefs/img/sources.json), to keep the repo
+small.
 """
 from __future__ import annotations
 
@@ -22,8 +24,43 @@ IMG = BRIEFS / "img"
 ORDER = ("morning", "news", "weekly", "themes")
 WIDTH = 430          # CSS px, a large phone
 SCALE = 2            # device pixel ratio, keeps text sharp when zoomed
-MAX_WIDTH = 760      # widen up to this so wide tables show whole instead of scrolling off-image
+MAX_WIDTH = 900      # widen up to this so wide tables show whole instead of scrolling off-image
 SLICE = 2400         # CSS px per image
+TAIL = 300           # a last slice this short joins the one before
+
+# Widest overflow of any table wrapper, in CSS px (0 when every table fits its card).
+OVERFLOW_JS = "Math.max(0, ...Array.from(document.querySelectorAll('.tw'), e => e.scrollWidth - e.clientWidth))"
+# Bottoms of blocks a slice may end at, so a cut never runs through a line of text.
+CUTS_JS = """Array.from(document.querySelectorAll('header, .kpis, section, h2, h3, p, li, tr, blockquote, footer'),
+  e => Math.ceil(e.getBoundingClientRect().bottom + window.scrollY))"""
+# Used only when a table still overflows at MAX_WIDTH: tighter type and padding, then clip, never spill.
+COMPACT = (".tw table{font-size:12px}.tw th,.tw td{padding:4px 5px}.pbar{width:60px}svg.spark{width:64px}"
+           ".tw{overflow:hidden}")
+
+
+def fit(page) -> int:
+    """Widen the viewport until every table fits inside its card, up to MAX_WIDTH. Returns the width."""
+    width = WIDTH
+    page.set_viewport_size({"width": width, "height": 900})
+    while (over := page.evaluate(OVERFLOW_JS)) > 0 and width < MAX_WIDTH:
+        width = min(MAX_WIDTH, width + max(over, 8))
+        page.set_viewport_size({"width": width, "height": 900})
+    if over > 0:
+        page.add_style_tag(content=COMPACT)
+    return width
+
+
+def cuts(height: int, ends: list[int]) -> list[tuple[int, int]]:
+    """Splits [0, height) into slices of about SLICE px, ending each at a block bottom where one is close."""
+    ends = sorted({e for e in ends if 0 < e < height})
+    out, top = [], 0
+    while height - top > SLICE + TAIL:
+        ok = [e for e in ends if top + SLICE // 2 <= e <= top + SLICE]
+        end = ok[-1] if ok else top + SLICE
+        out.append((top, end))
+        top = end
+    out.append((top, height))
+    return out
 
 
 def shoot(tasks: list[str]) -> dict[str, list[str]]:
@@ -40,17 +77,13 @@ def shoot(tasks: list[str]) -> dict[str, list[str]]:
         for task in tasks:
             page.set_viewport_size({"width": WIDTH, "height": 900})
             page.goto((BRIEFS / f"{task}.html").as_uri(), wait_until="load")
-            page.add_style_tag(content=".tw{overflow:visible}")
-            width = min(MAX_WIDTH, page.evaluate("document.documentElement.scrollWidth"))
-            width = max(width, WIDTH)
-            if width > WIDTH:
-                page.set_viewport_size({"width": width, "height": 900})
+            width = fit(page)
             height = page.evaluate("document.documentElement.scrollHeight")
             names = []
-            for i, top in enumerate(range(0, height, SLICE), 1):
+            for i, (top, end) in enumerate(cuts(height, page.evaluate(CUTS_JS)), 1):
                 name = f"{task}-{i}.png"
                 page.screenshot(path=str(IMG / name), full_page=True,
-                                clip={"x": 0, "y": top, "width": width, "height": min(SLICE, height - top)})
+                                clip={"x": 0, "y": top, "width": width, "height": end - top})
                 names.append(name)
             for f in IMG.glob(f"{task}-*.png"):
                 if f.name not in names:
