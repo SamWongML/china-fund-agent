@@ -1,15 +1,15 @@
-# Morning brief Thu Oct 22
+# Morning brief Fri Oct 23
 
-Bottom line: the broad market slipped on Wednesday, with new-energy ETFs falling hardest while AI and chip ETFs edged up; the Bank of Korea and US jobless claims are today's events.
+Bottom line: Thursday was a broad selloff led by ChiNext and AI ETFs, with only banks flat and bond ETFs unchanged; Japan's CPI and Europe's PMIs are today's data.
 
 ## News
-1. **The PBOC began nine days of overnight reverse repos** (Oct 21 to Nov 2), capped at 1 trillion yuan a day. It is the first step toward an overnight policy rate and a liquidity positive for bond ETFs. The LPR was unchanged for a 17th month.
-2. **Chinese tech firms ordered more than 3 million Nvidia RTX PRO 5500 cards,** worth over 35 billion dollars, and US chip stocks rebounded. Korean memory stocks kept falling, though.
-3. **The first 18 active ETFs were approved, and a national data group (国家数据集团) is being set up.** Former PBOC Governor 周小川 warned that policy tools are needed against turmoil from failed AI investments.
+1. **The CPC and State Council issued a guideline on merging tech and industrial innovation.** It targets breakthroughs in integrated circuits, machine tools, advanced materials, embodied AI and 6G. It is policy support for chip, robotics and materials themes, but prices fell anyway on Thursday.
+2. **Bond yields fell on expectations of a new policy-rate anchor.** The 10-year yield dropped to 1.62%, and rate-bond ETFs strengthened on Wednesday.
+3. **The CSRC will launch a BSE 50 ETF** and IPO allocation by market value on the Beijing exchange. The national data group was formally set up.
 
 ## Watch
-- The Bank of Korea rate decision and 宇树科技's World Physical AI conference.
-- US initial jobless claims (expected 20.0 ten-thousands).
+- Japan September CPI (expected 2.1) and the euro-area October manufacturing PMI (expected 52.8).
+- The embodied-AI contest at the Global Developer Pioneer conference.
 
 ## Data health
-- The news input is running about a day late. The Oct 21 input isn't built yet, so the news above is from Oct 20.
+- The news input is still about a day late, so today's news is from Oct 21.
