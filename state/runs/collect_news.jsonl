@@ -50,3 +50,4 @@
 {"ts": "2026-10-24T13:52:15+08:00", "job": "collect_news", "ok": true, "ok_sources": 16, "added": 168, "merged": 36}
 {"ts": "2026-10-24T18:58:29+08:00", "job": "collect_news", "ok": true, "ok_sources": 16, "added": 183, "merged": 39}
 {"ts": "2026-10-24T22:32:06+08:00", "job": "collect_news", "ok": true, "ok_sources": 16, "added": 130, "merged": 32}
+{"ts": "2026-10-25T02:08:58+08:00", "job": "collect_news", "ok": true, "ok_sources": 16, "added": 127, "merged": 15}
