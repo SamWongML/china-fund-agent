@@ -2,7 +2,7 @@
   "ok": true,
   "funds": 51,
   "first_week": "2016-01-08",
-  "last_week": "2026-10-16",
+  "last_week": "2026-10-23",
   "live": [
     "low_vol",
     "ma200_gap",
@@ -24,22 +24,22 @@
   "signals": {
     "trend_12w": {
       "status": "unproven",
-      "weeks": 545,
-      "ic_4w": 0.01,
-      "t_4w": 0.36,
-      "ic_12w": 0.026,
+      "weeks": 546,
+      "ic_4w": 0.012,
+      "t_4w": 0.41,
+      "ic_12w": 0.025,
       "ic_2016_19": 0.002,
       "ic_2020_22": 0.002,
-      "ic_2023_now": 0.027,
+      "ic_2023_now": 0.031,
       "top_third_spread_4w_pct": 0.18,
       "spread_periods": 137
     },
     "trend_26w": {
       "status": "unproven",
-      "weeks": 545,
+      "weeks": 546,
       "ic_4w": 0.019,
       "t_4w": 0.63,
-      "ic_12w": 0.056,
+      "ic_12w": 0.055,
       "ic_2016_19": 0.013,
       "ic_2020_22": 0.019,
       "ic_2023_now": 0.026,
@@ -48,10 +48,10 @@
     },
     "ma200_gap": {
       "status": "unproven",
-      "weeks": 545,
+      "weeks": 546,
       "ic_4w": 0.027,
       "t_4w": 0.81,
-      "ic_12w": 0.06,
+      "ic_12w": 0.059,
       "ic_2016_19": 0.017,
       "ic_2020_22": 0.016,
       "ic_2023_now": 0.046,
@@ -60,73 +60,73 @@
     },
     "rev_1w": {
       "status": "rejected",
-      "weeks": 545,
+      "weeks": 546,
       "ic_4w": -0.028,
-      "t_4w": -0.89,
-      "ic_12w": -0.009,
+      "t_4w": -0.87,
+      "ic_12w": -0.01,
       "ic_2016_19": -0.028,
       "ic_2020_22": -0.043,
-      "ic_2023_now": -0.017,
+      "ic_2023_now": -0.015,
       "top_third_spread_4w_pct": -0.14,
       "spread_periods": 137
     },
     "rev_4w": {
       "status": "rejected",
-      "weeks": 545,
+      "weeks": 546,
       "ic_4w": -0.008,
-      "t_4w": -0.24,
-      "ic_12w": -0.011,
+      "t_4w": -0.27,
+      "ic_12w": -0.012,
       "ic_2016_19": 0.008,
       "ic_2020_22": -0.006,
-      "ic_2023_now": -0.026,
+      "ic_2023_now": -0.028,
       "top_third_spread_4w_pct": -0.3,
       "spread_periods": 137
     },
     "max_20d": {
       "status": "unproven",
-      "weeks": 545,
-      "ic_4w": 0.038,
-      "t_4w": 1.19,
-      "ic_12w": 0.05,
+      "weeks": 546,
+      "ic_4w": 0.039,
+      "t_4w": 1.22,
+      "ic_12w": 0.051,
       "ic_2016_19": 0.049,
       "ic_2020_22": 0.01,
-      "ic_2023_now": 0.05,
+      "ic_2023_now": 0.051,
       "top_third_spread_4w_pct": -0.24,
       "spread_periods": 137
     },
     "turnover_surge": {
       "status": "unproven",
-      "weeks": 545,
-      "ic_4w": 0.013,
-      "t_4w": 0.62,
+      "weeks": 546,
+      "ic_4w": 0.012,
+      "t_4w": 0.61,
       "ic_12w": 0.014,
       "ic_2016_19": -0.005,
       "ic_2020_22": 0.049,
-      "ic_2023_now": 0.002,
+      "ic_2023_now": 0.001,
       "top_third_spread_4w_pct": -0.03,
       "spread_periods": 137
     },
     "low_vol": {
       "status": "unproven",
-      "weeks": 545,
-      "ic_4w": 0.052,
-      "t_4w": 1.45,
-      "ic_12w": 0.107,
+      "weeks": 546,
+      "ic_4w": 0.054,
+      "t_4w": 1.49,
+      "ic_12w": 0.108,
       "ic_2016_19": 0.093,
       "ic_2020_22": -0.016,
-      "ic_2023_now": 0.065,
+      "ic_2023_now": 0.069,
       "top_third_spread_4w_pct": -0.02,
       "spread_periods": 137
     },
     "legacy_screen": {
       "status": "unproven",
-      "weeks": 545,
+      "weeks": 546,
       "ic_4w": 0.028,
-      "t_4w": 0.87,
+      "t_4w": 0.89,
       "ic_12w": 0.053,
       "ic_2016_19": 0.02,
       "ic_2020_22": 0.023,
-      "ic_2023_now": 0.04,
+      "ic_2023_now": 0.041,
       "top_third_spread_4w_pct": 0.23,
       "spread_periods": 137
     }
@@ -138,15 +138,15 @@
     },
     "breadth_below_half": {
       "weeks": 237,
-      "csi300_next_4w_pct": 0.14
+      "csi300_next_4w_pct": 0.09
     }
   },
   "base_rates": [
     {
       "composite_band": "all",
-      "fund_weeks": 19976,
-      "beat_csi300_pct": 49.5,
-      "avg_excess_4w_pct": 0.3
+      "fund_weeks": 20017,
+      "beat_csi300_pct": 49.6,
+      "avg_excess_4w_pct": 0.31
     },
     {
       "composite_band": "0-20",
@@ -156,27 +156,27 @@
     },
     {
       "composite_band": "20-40",
-      "fund_weeks": 5219,
+      "fund_weeks": 5230,
       "beat_csi300_pct": 47.2,
-      "avg_excess_4w_pct": 0.14
+      "avg_excess_4w_pct": 0.13
     },
     {
       "composite_band": "40-60",
-      "fund_weeks": 8026,
-      "beat_csi300_pct": 49.6,
+      "fund_weeks": 8048,
+      "beat_csi300_pct": 49.7,
       "avg_excess_4w_pct": 0.46
     },
     {
       "composite_band": "60-80",
-      "fund_weeks": 5184,
-      "beat_csi300_pct": 50.5,
-      "avg_excess_4w_pct": 0.25
+      "fund_weeks": 5190,
+      "beat_csi300_pct": 50.6,
+      "avg_excess_4w_pct": 0.26
     },
     {
       "composite_band": "80-100",
-      "fund_weeks": 1114,
-      "beat_csi300_pct": 54.7,
-      "avg_excess_4w_pct": 0.11
+      "fund_weeks": 1116,
+      "beat_csi300_pct": 54.8,
+      "avg_excess_4w_pct": 0.15
     }
   ]
 }

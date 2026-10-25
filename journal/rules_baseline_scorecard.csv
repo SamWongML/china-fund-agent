@@ -1,5 +1,9 @@
-id,week,code,action,confidence,p_up,view,theme,horizon_weeks,held,override,status
-rules-2026-W42-511010,2026-W42,511010,buy,0.6,,,,4,False,False,pending
-rules-2026-W42-510880,2026-W42,510880,buy,0.6,,,,4,False,False,pending
-rules-2026-W42-510300,2026-W42,510300,buy,0.6,,,,4,False,False,pending
-rules-2026-W42-518880,2026-W42,518880,buy,0.6,,,,4,False,False,pending
+id,week,code,action,confidence,p_up,view,theme,horizon_weeks,held,override,status,entry_date,exit_date,ret_pct,bench_ret_pct,excess_pct,hit,beat
+rules-2026-W42-511010,2026-W42,511010,buy,0.6,,,,4,False,False,open,2026-10-19,2026-10-23,0.12,-1.66,1.78,,
+rules-2026-W42-510880,2026-W42,510880,buy,0.6,,,,4,False,False,open,2026-10-19,2026-10-23,-4.42,-1.66,-2.76,,
+rules-2026-W42-510300,2026-W42,510300,buy,0.6,,,,4,False,False,open,2026-10-19,2026-10-23,-1.46,-1.66,0.2,,
+rules-2026-W42-518880,2026-W42,518880,buy,0.6,,,,4,False,False,open,2026-10-19,2026-10-23,-4.14,-1.66,-2.48,,
+rules-2026-W43-511010,2026-W43,511010,buy,0.6,,,,4,False,False,pending,,,,,,,
+rules-2026-W43-510880,2026-W43,510880,buy,0.6,,,,4,False,False,pending,,,,,,,
+rules-2026-W43-510300,2026-W43,510300,buy,0.6,,,,4,False,False,pending,,,,,,,
+rules-2026-W43-518880,2026-W43,518880,buy,0.6,,,,4,False,False,pending,,,,,,,
