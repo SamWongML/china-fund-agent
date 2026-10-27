@@ -1,15 +1,16 @@
-# Morning brief Fri Oct 23
+# Morning brief Tue Oct 27
 
-Bottom line: Thursday was a broad selloff led by ChiNext and AI ETFs, with only banks flat and bond ETFs unchanged; Japan's CPI and Europe's PMIs are today's data.
+Tech and chip ETFs fell again on Monday while banks and dividend ETFs held up, so the risk-off tone continues into the Plenum week.
 
 ## News
-1. **The CPC and State Council issued a guideline on merging tech and industrial innovation.** It targets breakthroughs in integrated circuits, machine tools, advanced materials, embodied AI and 6G. It is policy support for chip, robotics and materials themes, but prices fell anyway on Thursday.
-2. **Bond yields fell on expectations of a new policy-rate anchor.** The 10-year yield dropped to 1.62%, and rate-bond ETFs strengthened on Wednesday.
-3. **The CSRC will launch a BSE 50 ETF** and IPO allocation by market value on the Beijing exchange. The national data group was formally set up.
+1. **Fifth Plenum opened Oct 26.** Its signals for the next five-year plan are the main policy event for tech and consumption funds this week.
+2. **STAR earnings were strong.** 64 STAR firms' Q1–Q3 profit rose more than 90%, a support for chip and AI ETFs after the selloff.
+3. **Gulf risk is rising.** Houthis attacked Saudi Arabia and explosions were heard in Riyadh, which pushes up oil risk.
 
 ## Watch
-- Japan September CPI (expected 2.1) and the euro-area October manufacturing PMI (expected 52.8).
-- The embodied-AI contest at the Global Developer Pioneer conference.
+- September industrial profits (prior 4.2).
+- Shanghai's satellite-internet plan, relevant to satellite ETFs such as 159206.
+- The Russia–Ukraine ceasefire at Oleshky starts today.
 
 ## Data health
-- The news input is still about a day late, so today's news is from Oct 21.
+- The news input for Oct 26 has not been built yet; the news step still runs about a day behind.
