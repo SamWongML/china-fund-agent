@@ -1,107 +1,108 @@
-# Weekly digest 2026-W42 (data as of 2026-10-16)
+# Weekly digest 2026-W43 (data as of 2026-10-23)
+
+_Written late, on Tue Oct 27, because the scheduled Sunday run was missed during a session outage. Calls are logged in the journal under week 2026-W44 (the journal stamps the week from the logging date)._
 
 ## Summary
-- Regime: **risk-off**. The CSI 300 is -10.87% below its 200-day average and down -11.23% over 12 weeks; only 13.7% of tracked funds are above their 200-day average.
-- Portfolio vs target vs benchmark: no holdings yet, so there is no portfolio return to compare with the 12%/yr target or the CSI 300. The scorecard has no graded calls yet; this is the first logged week.
-- **No call clears the 60% confidence floor, so every call is Watch.** The best are defensive: 红利ETF 510880 at 57%, 鹏华安颐混合A 012111 at 55%.
-- The rules-only baseline is the core sleeve: 511010 at 25.0%, 510880 at 16.3%, 510300 at 15.6%, 518880 at 13.1%, with 30.0% unallocated. Most of it is one defensive bet (cluster 012111).
-- The week's news was dominated by a global AI hardware selloff. China's State Council backed AI and the insurance regulator backed cover for new drugs, but prices haven't turned yet.
+- Regime: **risk-off**. The CSI 300 is -12.06% below its 200-day average and down -13.17% over 12 weeks; only 13.7% of tracked funds are above their 200-day average.
+- Portfolio vs target vs benchmark: no holdings, so no portfolio return to compare with the 12%/yr target or the CSI 300. The scorecard has 24 decisions and 0 closed, so nothing is graded yet.
+- **No call clears the 60% confidence floor, so every call is Watch.** The best are defensive: 中信保诚稳鸿D 020927 at 57% and 国债ETF 511010 at 53%.
+- The rules-only baseline is the core sleeve: 511010 at 25.0%, 510300 at 16.5%, 510880 at 16.2%, 518880 at 12.2%, with 30.1% unallocated. Three of the four share cluster 020927, so it is mostly one defensive bet.
+- News: the PBOC's Financial Street Forum package and the overnight policy-rate switch, the tech-innovation guideline (chips, machine tools, materials, embodied AI), and the Nasdaq's 2.6% drop on Oct 22.
 
 ## Holdings: top 3
-_No holdings: `portfolio/holdings.yaml` is empty. Add your positions (code, units, cost, date bought) and next Sunday each one gets a Buy or Sell with a percentage._
+_No holdings: `portfolio/holdings.yaml` is empty. Add your positions (code, units, cost, date bought) and each one will get a Buy or Sell with a percentage._
 
 ## Theme watchlist
-Percentages are the chance of beating the CSI 300 over the next 4 weeks, started from each composite band's base rate (20-40: 47.2%, 40-60: 49.6%, 60-80: 50.5%, 80-100: 54.7%) and adjusted for named reasons.
+Percentages are the chance of beating the CSI 300 over the next 4 weeks, started from each composite band's base rate (20-40: 47.2%, 40-60: 49.7%, 60-80: 50.6%, 80-100: 54.8%) and adjusted for named reasons.
 
 ### AI and compute (growth)
-395 news mentions this week, mostly the global AI selloff, against State Council support for AI on Oct 16. 31 launches in 6 months is a launch wave.
+960 news mentions this week against a 4-week average of 99.0; 33 launches in 6 months is a launch wave.
 
 | code | name | call | % | reason |
 |---|---|---|---|---|
-| 159363 | 创业板人工智能ETF华宝 | Watch | 42% | composite 37.1; risk-off, AI selloff and launch wave outweigh policy support |
-| 159819 | 人工智能ETF易方达 | Watch | 42% | composite 36.0; -26.92% over 12 weeks; same cluster as 159363 |
-| 159852 | 软件ETF嘉实 | Watch | 44% | composite 35.7; software fell less than hardware over 4 weeks (-6.38%) |
-
-### Semiconductors and equipment (growth)
-81 mentions; US chip and storage stocks fell again on Friday. Three equipment ETFs are still above their 200-day average.
-
-| code | name | call | % | reason |
-|---|---|---|---|---|
-| 159516 | 半导体设备ETF国泰 | Watch | 45% | composite 45.5, the best in the theme; above its 200-day average |
-| 588170 | 科创半导体ETF华夏 | Watch | 45% | composite 42.7; above its 200-day average; same cluster as 159516 |
-| 512480 | 半导体ETF国联安 | Watch | 42% | composite 35.3; -44.49% off its 52-week high, below its 200-day average |
+| 159819 | 人工智能ETF易方达 | Watch | 44% | composite 33.6; risk-off and launch wave outweigh AI policy support |
+| 515880 | 通信ETF国泰 | Watch | 43% | composite 33.3; -25.07% over 4 weeks, the hardest hit |
+| 159852 | 软件ETF嘉实 | Watch | 45% | composite 30.6; software held up better (+2.64% over 4 weeks) |
 
 ### Robotics and embodied AI (growth)
-29 mentions; no launch wave.
+184 mentions against an average of 7.2; embodied AI named in the innovation guideline.
 
 | code | name | call | % | reason |
 |---|---|---|---|---|
-| 159530 | 机器人ETF易方达 | Watch | 44% | composite 36.5; risk-off; -22.5% over 12 weeks |
-| 159667 | 工业母机ETF国泰 | Watch | 44% | composite 31.2; risk-off |
-| 159663 | 机床ETF华夏 | Watch | 43% | composite 30.3; risk-off, thin turnover |
+| 159530 | 机器人ETF易方达 | Watch | 43% | composite 29.4; flagged for a 1-week gain and a lottery-like daily jump |
+| 159667 | 工业母机ETF国泰 | Watch | 45% | composite 33.2; machine tools named in the guideline |
+| 159663 | 机床ETF华夏 | Watch | 45% | composite 34.5; thin turnover |
+
+### Semiconductors and equipment (growth)
+244 mentions; integrated circuits are the guideline's first target, but prices are -44% to -47% off their 52-week highs.
+
+| code | name | call | % | reason |
+|---|---|---|---|---|
+| 159516 | 半导体设备ETF国泰 | Watch | 48% | composite 47.1, the best in the theme |
+| 588200 | 科创芯片ETF嘉实 | Watch | 47% | composite 40.6; different index family from 159516 |
+| 512480 | 半导体ETF国联安 | Watch | 46% | composite 38.3; -24.41% over 12 weeks |
 
 ### Commercial aerospace and satellites (emerging)
-33 mentions; 5 launches in 6 months, not yet a wave.
+83 mentions; 6 launches in 6 months.
 
 | code | name | call | % | reason |
 |---|---|---|---|---|
-| 159227 | 航空航天ETF华夏 | Watch | 44% | composite 38.2; nearly flat over 12 weeks (-0.51%) |
-| 159267 | 航天ETF华安 | Watch | 44% | composite 37.5; same cluster as 159227 |
-| 159206 | 卫星ETF永赢 | Watch | 44% | composite 34.8; -46.3% off its 52-week high |
+| 159227 | 航空航天ETF华夏 | Watch | 47% | composite 42.9; +1.44% over 12 weeks |
+| 159267 | 航天ETF华安 | Watch | 47% | composite 41.4; same cluster as 159227 |
+| 159206 | 卫星ETF永赢 | Watch | 45% | composite 39.4; -45.21% off its 52-week high |
 
 ### Innovative drugs and biomedicine (growth)
-51 mentions. The medical insurance 15th Five-Year Plan backs commercial insurance cover for new drugs and devices. Healthcare has held up better than tech over 4 weeks.
+133 mentions; insurance cover for new drugs and devices; healthcare beat the CSI 300 last week.
 
 | code | name | call | % | reason |
 |---|---|---|---|---|
-| 159992 | 创新药ETF银华 | Watch | 51% | composite 45.8; the most liquid; policy support for new drugs |
-| 159883 | 医疗器械ETF永赢 | Watch | 51% | composite 51.2; policy covers new devices |
-| 159837 | 生物科技ETF易方达 | Watch | 51% | composite 51.0; thin turnover |
+| 159883 | 医疗器械ETF永赢 | Watch | 51% | composite 53.0; +3.76% over 4 weeks |
+| 159992 | 创新药ETF银华 | Watch | 51% | composite 49.9; the most liquid drug ETF |
+| 159837 | 生物科技ETF易方达 | Watch | 50% | composite 51.8; thin turnover |
 
 ### Grid equipment and power (growth)
-37 mentions; 15 launches in 6 months is a launch wave. Power utilities move with the defensive cluster.
+114 mentions; 13 launches in 6 months is a launch wave.
 
 | code | name | call | % | reason |
 |---|---|---|---|---|
-| 159611 | 电力ETF广发 | Watch | 49% | composite 67.1; defensive, +2.77% over 12 weeks; launch wave |
-| 159625 | 绿色电力ETF嘉实 | Watch | 48% | composite 64.7; same cluster as 159611, thin turnover |
-| 159326 | 电网设备ETF华夏 | Watch | 45% | composite 47.9; risk-off and launch wave |
+| 159611 | 电力ETF广发 | Watch | 48% | composite 59.5; moves with the defensive cluster |
+| 159625 | 绿色电力ETF嘉实 | Watch | 47% | composite 58.9; thin turnover |
+| 159326 | 电网设备ETF华夏 | Watch | 45% | composite 39.5; -34.94% off its 52-week high |
 
 ### New materials and rare earths (emerging)
-9 mentions.
+33 mentions; rare-earth consolidation under China Rare Earth Group; advanced materials named in the guideline.
 
 | code | name | call | % | reason |
 |---|---|---|---|---|
-| 516150 | 稀土ETF嘉实 | Watch | 47% | composite 43.1; risk-off |
-| 562800 | 稀有金属ETF嘉实 | Watch | 47% | composite 43.2; same cluster as 516150 |
-| 588160 | 科创新材料ETF南方 | Watch | 44% | composite 26.8; moves with chips |
+| 516150 | 稀土ETF嘉实 | Watch | 47% | composite 35.2; consolidation is a supply positive |
+| 562800 | 稀有金属ETF嘉实 | Watch | 46% | composite 32.1; -14.68% over 4 weeks |
+| 588160 | 科创新材料ETF南方 | Watch | 45% | composite 34.9; moves with chips |
 
 ## New picks
-### 510880 红利ETF华泰柏瑞: Watch 57%
-- Cluster 012111. Composite 81.8 (band 80-100, base 54.7%), plus a little because dividend stocks hold up in risk-off. +9.03% over 12 weeks and only -1.97% off its 52-week high. A rules-only core buy at 16.3%.
-- Why not Buy: 57% is below the 60% floor.
-- Falsifier: dividend names start falling with the market.
-
-### 012111 鹏华安颐混合A: Watch 55%
-- Cluster 012111 (the same bet as 510880; pick one). Composite 91.0, the top candidate. Low volatility (6.09% annualised) and a -3.65% max drawdown over 52 weeks.
+### 020927 中信保诚稳鸿D: Watch 57%
+- Cluster 020927. Composite 97.6, the top candidate (band 80-100, base 54.8%), plus a little for risk-off. Volatility 1.96% annualised and a -0.78% max drawdown over 52 weeks.
 - Open-end fund: selling within 7 days usually costs a redemption penalty.
+- Why not Buy: 57% is below the 60% floor.
 - Falsifier: its NAV breaks its 52-week drawdown low, or the regime turns risk-on.
 
-### 511010 国债ETF国泰: Watch 51%
-- Cluster 012111. Composite 75.6. Interbank money is the loosest since May and the PBOC restated "moderately loose" policy, but it is flagged **crowded** (turnover surge), so no buy this week even though it is the largest rules-only core weight (25.0%).
-- Falsifier: bond yields rise on hot US inflation.
+### 512010 医药ETF易方达: Watch 52%
+- Cluster 512010, a different bet from the bond cluster. Composite 62.5 (band 60-80, base 50.6%), plus a little for the insurance plan. +2.45% last week.
+- Falsifier: healthcare falls back with the broad market.
+
+### 511010 国债ETF国泰: Watch 53%
+- Cluster 020927 (the same bet as 020927). Composite 80.7, but flagged **crowded** (turnover surge), so no buy even though it is the largest rules-only core weight (25.0%). The PBOC's overnight repos and policy-rate switch support bonds.
+- Falsifier: bond yields rebound.
 
 ## Risks and what would change my mind
-- **Monday Oct 19:** China Q3 GDP and September activity data, plus the Financial Street Forum, where major policy is expected. Strong stimulus would be the main reason to lift growth themes.
-- **Tuesday Oct 20:** the LPR. Nvidia GTC Berlin runs Oct 20–21.
-- Brent oil hit 110 dollars on Hormuz shipping attacks: an inflation risk, and a boost for energy names that are already flagged crowded (159981).
+- The CPC's Fifth Plenum opened Oct 26: a policy surprise there could lift growth themes.
+- The Nasdaq fell 2.6% on Oct 22; more global AI weakness would keep chips and AI under pressure.
+- New US outbound investment rules (the commerce ministry responded Oct 24) are a risk for tech themes.
 - What changes my mind: breadth back above half of funds, or the CSI 300 back above its 200-day average.
 
 ## Data notes
-- Data as of 2026-10-16; fact sheet built 2026-10-18 08:08 HKT.
-- ETF premium/discount and share changes are blank because Eastmoney's ETF feed is down from GitHub; Sina fills prices.
-- News collection began Oct 15, so there is no prior week to compare news counts against.
-- The backtest marks no signal as proven, so the gaps between bands are small: every percentage here is close to a coin flip.
-- Candidate 013835 shows a lottery-like daily jump (likely a data artefact) and was ignored.
+- Data as of 2026-10-23; fact sheet built 2026-10-25 08:24 HKT.
+- The daily news input runs about a day late, so the week's rollup lists digests only through Oct 21.
+- The backtest marks no signal as proven, so every percentage here is close to a coin flip.
+- Candidate 014259 shows a lottery-like daily jump and was ignored.
 
 Research signals from public data, not financial advice.
