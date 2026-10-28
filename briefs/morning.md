@@ -1,16 +1,16 @@
-# Morning brief Tue Oct 27
+# Morning brief Wed Oct 28
 
-Tech and chip ETFs fell again on Monday while banks and dividend ETFs held up, so the risk-off tone continues into the Plenum week.
+A broad selloff on Tuesday hit chip and STAR ETFs hardest, and banks and dividend ETFs were the only ones that held up.
 
 ## News
-1. **Fifth Plenum opened Oct 26.** Its signals for the next five-year plan are the main policy event for tech and consumption funds this week.
-2. **STAR earnings were strong.** 64 STAR firms' Q1–Q3 profit rose more than 90%, a support for chip and AI ETFs after the selloff.
-3. **Gulf risk is rising.** Houthis attacked Saudi Arabia and explosions were heard in Riyadh, which pushes up oil risk.
+1. **PBOC injected 700 billion yuan through the MLF.** Ample liquidity supports bond ETFs.
+2. **AI earnings and the Anthropic IPO filing.** 光迅科技's Q1–Q3 profit rose 78.65%, but chip ETFs still fell.
+3. **Brazil's market crashed after Lula's re-election.** This adds to global risk-off sentiment.
 
 ## Watch
-- September industrial profits (prior 4.2).
-- Shanghai's satellite-internet plan, relevant to satellite ETFs such as 159206.
-- The Russia–Ukraine ceasefire at Oleshky starts today.
+- New Zealand's rate decision; most economists expect a 25bp hike.
+- Whether the Fed holds this week; the CME tool puts the chance of a hold at 90%.
+- Signals from the Fifth Plenum.
 
 ## Data health
-- The news input for Oct 26 has not been built yet; the news step still runs about a day behind.
+- The Oct 27 news input hasn't been built yet; news is still about a day behind.
