@@ -9,9 +9,9 @@ Screenshots of the latest HTML brief of each scheduled task, for the GitHub mobi
 
 <a id="morning"></a>
 
-## Morning brief: Morning brief Tue Oct 27
+## Morning brief: Morning brief Wed Oct 28
 
-2026-10-27 · prices as of 2026-10-26 close · updated 2026-10-27 08:23 HKT · [HTML](morning.html)
+2026-10-28 · prices as of 2026-10-27 close · updated 2026-10-28 08:22 HKT · [HTML](morning.html)
 
 ![Morning brief part 1](img/morning-1.png)
 
