@@ -17,9 +17,9 @@ Screenshots of the latest HTML brief of each scheduled task, for the GitHub mobi
 
 <a id="news"></a>
 
-## Daily news digest: News digest 2026-10-26
+## Daily news digest: News digest 2026-10-27
 
-News for 2026-10-26 · for the Sunday advisor · updated 2026-10-28 07:09 HKT · [HTML](news.html)
+News for 2026-10-27 · for the Sunday advisor · updated 2026-10-29 07:08 HKT · [HTML](news.html)
 
 ![Daily news digest part 1](img/news-1.png)
 
