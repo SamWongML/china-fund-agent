@@ -1,16 +1,15 @@
-# Morning brief Wed Oct 28
+# Morning brief Thu Oct 29
 
-A broad selloff on Tuesday hit chip and STAR ETFs hardest, and banks and dividend ETFs were the only ones that held up.
+Tech, chip and telecom ETFs bounced hard on Wednesday after the US memory and optical rally, while banks and consumer ETFs slipped.
 
 ## News
-1. **PBOC injected 700 billion yuan through the MLF.** Ample liquidity supports bond ETFs.
-2. **AI earnings and the Anthropic IPO filing.** 光迅科技's Q1–Q3 profit rose 78.65%, but chip ETFs still fell.
-3. **Brazil's market crashed after Lula's re-election.** This adds to global risk-off sentiment.
+1. **PBOC created a new bond-market backstop.** A swap facility for large non-bank redemptions aims to stop forced selling; this supports bond funds.
+2. **Heavy liquidity.** The PBOC ran a 1 trillion yuan overnight reverse repo, and 365 billion yuan of policy financing tools were fully deployed.
+3. **US tech rebounded.** The Nasdaq rose 0.82%, led by memory and optical stocks, which fed the onshore chip bounce.
 
 ## Watch
-- New Zealand's rate decision; most economists expect a 25bp hike.
-- Whether the Fed holds this week; the CME tool puts the chance of a hold at 90%.
-- Signals from the Fifth Plenum.
+- Whether the chip bounce holds after a weak week.
+- Signals from the Fifth Plenum and the Fed decision this week.
 
 ## Data health
-- The Oct 27 news input hasn't been built yet; news is still about a day behind.
+- The Oct 28 news input hasn't been built yet; news is still about a day behind.
