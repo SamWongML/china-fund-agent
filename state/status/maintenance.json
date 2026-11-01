@@ -1,0 +1,8 @@
+{
+  "calendar_days": 8797,
+  "calendar_horizon_days": 60,
+  "calendar_warning": false,
+  "data_size": "43M\tdata",
+  "git_objects": "count: 0; size: 0 bytes; in-pack: 440; packs: 1; size-pack: 31.14 MiB; prune-packable: 0; garbage: 0; size-garbage: 0 bytes",
+  "updated": "2026-11-01T17:25:34+08:00"
+}
