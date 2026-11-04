@@ -1,5 +1,5 @@
 {
-  "last_run": "2026-11-05T02:38:35+08:00",
+  "last_run": "2026-11-05T06:35:59+08:00",
   "ok": true,
   "sources": {
     "eastmoney_7x24": {
@@ -23,8 +23,8 @@
       "n": 20
     },
     "fed_press": {
-      "ok": true,
-      "n": 20
+      "ok": false,
+      "error": "404 Client Error: Not Found for url: https://www.federalreserve.gov/feeds/press_all.xml"
     },
     "fed_speeches": {
       "ok": true,
@@ -60,14 +60,14 @@
     },
     "gnews_china_economy": {
       "ok": true,
-      "n": 62
+      "n": 63
     },
     "gnews_cn_regulators": {
       "ok": true,
-      "n": 50
+      "n": 48
     }
   },
-  "added": 394,
-  "merged": 30,
-  "updated": "2026-11-05T02:38:35+08:00"
+  "added": 209,
+  "merged": 23,
+  "updated": "2026-11-05T06:35:59+08:00"
 }
