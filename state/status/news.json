@@ -1,5 +1,5 @@
 {
-  "last_run": "2026-11-06T02:44:48+08:00",
+  "last_run": "2026-11-06T06:40:20+08:00",
   "ok": true,
   "sources": {
     "eastmoney_7x24": {
@@ -55,19 +55,19 @@
       "n": 20
     },
     "gnews_reuters_business": {
-      "ok": true,
-      "n": 100
+      "ok": false,
+      "error": "503 Server Error: Service Unavailable for url: https://news.google.com/rss/search?q=site:reuters.com+markets+when:1d&hl=en-US&gl=US&ceid=US:en"
     },
     "gnews_china_economy": {
-      "ok": true,
-      "n": 59
+      "ok": false,
+      "error": "503 Server Error: Service Unavailable for url: https://news.google.com/rss/search?q=China+economy+OR+PBOC+OR+yuan+when:1d&hl=en-US&gl=US&ceid=US:en"
     },
     "gnews_cn_regulators": {
-      "ok": true,
-      "n": 41
+      "ok": false,
+      "error": "503 Server Error: Service Unavailable for url: https://news.google.com/rss/search?q=site:pbc.gov.cn+OR+site:csrc.gov.cn+OR+site:ndrc.gov.cn+OR+site:mof.gov.cn+O"
     }
   },
-  "added": 402,
-  "merged": 27,
-  "updated": "2026-11-06T02:44:48+08:00"
+  "added": 159,
+  "merged": 28,
+  "updated": "2026-11-06T06:40:20+08:00"
 }
