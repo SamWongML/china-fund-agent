@@ -102,3 +102,4 @@
 {"ts": "2026-11-04T18:54:10+08:00", "job": "collect_news", "ok": true, "ok_sources": 16, "added": 415, "merged": 31}
 {"ts": "2026-11-05T02:38:35+08:00", "job": "collect_news", "ok": true, "ok_sources": 16, "added": 394, "merged": 30}
 {"ts": "2026-11-05T06:35:59+08:00", "job": "collect_news", "ok": true, "ok_sources": 15, "added": 209, "merged": 23}
+{"ts": "2026-11-05T10:28:11+08:00", "job": "collect_news", "ok": true, "ok_sources": 16, "added": 328, "merged": 32}
