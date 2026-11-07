@@ -4,35 +4,25 @@
   "detail": {
     "etf": {
       "ok": true,
-      "source": "eastmoney",
-      "rows": 1666,
-      "problems": []
+      "skipped": "exists"
     },
     "lof": {
       "ok": true,
-      "source": "eastmoney",
-      "rows": 389,
-      "problems": []
+      "skipped": "exists"
     },
     "open": {
       "ok": true,
-      "source": "eastmoney",
-      "rows": 24356,
-      "problems": []
+      "skipped": "exists"
     },
     "open_rank": {
       "ok": true,
-      "source": "eastmoney",
-      "rows": 20708,
-      "problems": []
+      "skipped": "exists"
     },
     "exchange_rank": {
       "ok": true,
-      "source": "eastmoney",
-      "rows": 1711,
-      "problems": []
+      "skipped": "exists"
     }
   },
   "last_ok_date": "2026-11-06",
-  "updated": "2026-11-07T04:56:26+08:00"
+  "updated": "2026-11-07T11:15:43+08:00"
 }
