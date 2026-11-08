@@ -10,3 +10,7 @@
 {"id": "rules-2026-W44-510880", "ts": "2026-10-30T16:00:00+08:00", "week": "2026-W44", "source": "rules", "code": "510880", "action": "buy", "confidence": 0.6, "horizon_weeks": 4, "target_weight_pct": 15.7, "held": false}
 {"id": "rules-2026-W44-510300", "ts": "2026-10-30T16:00:00+08:00", "week": "2026-W44", "source": "rules", "code": "510300", "action": "buy", "confidence": 0.6, "horizon_weeks": 4, "target_weight_pct": 17.2, "held": false}
 {"id": "rules-2026-W44-518880", "ts": "2026-10-30T16:00:00+08:00", "week": "2026-W44", "source": "rules", "code": "518880", "action": "buy", "confidence": 0.6, "horizon_weeks": 4, "target_weight_pct": 12.1, "held": false}
+{"id": "rules-2026-W45-511010", "ts": "2026-11-06T16:00:00+08:00", "week": "2026-W45", "source": "rules", "code": "511010", "action": "buy", "confidence": 0.6, "horizon_weeks": 4, "target_weight_pct": 25.0, "held": false}
+{"id": "rules-2026-W45-510880", "ts": "2026-11-06T16:00:00+08:00", "week": "2026-W45", "source": "rules", "code": "510880", "action": "buy", "confidence": 0.6, "horizon_weeks": 4, "target_weight_pct": 16.0, "held": false}
+{"id": "rules-2026-W45-510300", "ts": "2026-11-06T16:00:00+08:00", "week": "2026-W45", "source": "rules", "code": "510300", "action": "buy", "confidence": 0.6, "horizon_weeks": 4, "target_weight_pct": 17.3, "held": false}
+{"id": "rules-2026-W45-518880", "ts": "2026-11-06T16:00:00+08:00", "week": "2026-W45", "source": "rules", "code": "518880", "action": "buy", "confidence": 0.6, "horizon_weeks": 4, "target_weight_pct": 11.7, "held": false}
