@@ -1,37 +1,37 @@
 {
   "funds/etf": {
-    "files": 25,
+    "files": 26,
     "first": "2026-10-15",
-    "last": "2026-11-18",
-    "last_sha256": "9a7f5ea83f319d55029802bba24f0d4480b98e33b685cd17ee6f623ce9b82d98"
+    "last": "2026-11-19",
+    "last_sha256": "40c149898ff1d90e0072045e022f3c7e04e4c54b945025bf8ab7a6b0c3c8aa7e"
   },
   "funds/exchange_rank": {
-    "files": 25,
+    "files": 26,
     "first": "2026-10-15",
-    "last": "2026-11-18",
-    "last_sha256": "e07979a9ae4c6d92a1a03c8775319697481a56518b43f221d64dfb019a86e889"
+    "last": "2026-11-19",
+    "last_sha256": "4ab38b394bfd68334dacc535d01aa1e6680ac475e71a176ca04be0294e603ceb"
   },
   "funds/lof": {
-    "files": 25,
+    "files": 26,
     "first": "2026-10-15",
-    "last": "2026-11-18",
-    "last_sha256": "4bd60a3c12ba84646693d181cd0851dddf2fa36befd9e333d7343d200d5da6c8"
+    "last": "2026-11-19",
+    "last_sha256": "60ec0dd655c371ee5b5c77c2013ca811a3e8e82d3ceef6432f2cebfb63a2a462"
   },
   "funds/open": {
-    "files": 25,
+    "files": 26,
     "first": "2026-10-15",
-    "last": "2026-11-18",
-    "last_sha256": "e8b824b1b2d106ca2db686470b2bc6819b6666839225538a459b88c7b45dac80"
+    "last": "2026-11-19",
+    "last_sha256": "93c8d990ae1455e0b7294aed5ae6a25ace3a0e3f2d1a0617696d1899b9aff3c3"
   },
   "funds/open_rank": {
-    "files": 25,
+    "files": 26,
     "first": "2026-10-15",
-    "last": "2026-11-18",
-    "last_sha256": "82be0f94721a687de3ed7e6b0a44a85a9d0fd09c60d0e5fb92ed9e2282876cf1"
+    "last": "2026-11-19",
+    "last_sha256": "7835ad013c631b31e26a736f07412162ee99e8283a9d5ce2d746ff78203d6352"
   },
   "news": {
-    "files": 41,
+    "files": 42,
     "first": "2026-10-08",
-    "last": "2026-11-19"
+    "last": "2026-11-20"
   }
 }
