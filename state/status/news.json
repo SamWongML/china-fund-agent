@@ -1,5 +1,5 @@
 {
-  "last_run": "2026-11-20T07:32:52+08:00",
+  "last_run": "2026-11-20T11:12:50+08:00",
   "ok": true,
   "sources": {
     "eastmoney_7x24": {
@@ -36,7 +36,7 @@
     },
     "boj_news": {
       "ok": true,
-      "n": 46
+      "n": 47
     },
     "cnbc_markets": {
       "ok": true,
@@ -60,14 +60,14 @@
     },
     "gnews_china_economy": {
       "ok": true,
-      "n": 48
+      "n": 46
     },
     "gnews_cn_regulators": {
       "ok": true,
-      "n": 32
+      "n": 33
     }
   },
-  "added": 148,
-  "merged": 24,
-  "updated": "2026-11-20T07:32:52+08:00"
+  "added": 297,
+  "merged": 35,
+  "updated": "2026-11-20T11:12:50+08:00"
 }
