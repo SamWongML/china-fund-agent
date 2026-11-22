@@ -4,3 +4,4 @@
 {"ts": "2026-11-01T09:17:59+08:00", "job": "weekly_build", "ok": true, "week": "2026-W44", "ready": true, "history_failures": []}
 {"ts": "2026-11-08T09:31:03+08:00", "job": "weekly_build", "ok": true, "week": "2026-W45", "ready": true, "history_failures": []}
 {"ts": "2026-11-15T10:05:08+08:00", "job": "weekly_build", "ok": true, "week": "2026-W46", "ready": true, "history_failures": []}
+{"ts": "2026-11-22T10:19:54+08:00", "job": "weekly_build", "ok": true, "week": "2026-W47", "ready": true, "history_failures": []}
