@@ -4,35 +4,25 @@
   "detail": {
     "etf": {
       "ok": true,
-      "source": "sina",
-      "rows": 1743,
-      "problems": []
+      "skipped": "exists"
     },
     "lof": {
       "ok": true,
-      "source": "sina",
-      "rows": 359,
-      "problems": []
+      "skipped": "exists"
     },
     "open": {
       "ok": true,
-      "source": "eastmoney",
-      "rows": 24441,
-      "problems": []
+      "skipped": "exists"
     },
     "open_rank": {
       "ok": true,
-      "source": "eastmoney",
-      "rows": 20799,
-      "problems": []
+      "skipped": "exists"
     },
     "exchange_rank": {
       "ok": true,
-      "source": "eastmoney",
-      "rows": 1717,
-      "problems": []
+      "skipped": "exists"
     }
   },
   "last_ok_date": "2026-11-26",
-  "updated": "2026-11-27T07:53:31+08:00"
+  "updated": "2026-11-27T13:25:34+08:00"
 }
