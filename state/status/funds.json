@@ -1,28 +1,38 @@
 {
-  "target_date": "2026-11-26",
+  "target_date": "2026-11-27",
   "ok": true,
   "detail": {
     "etf": {
       "ok": true,
-      "skipped": "exists"
+      "source": "eastmoney",
+      "rows": 1691,
+      "problems": []
     },
     "lof": {
       "ok": true,
-      "skipped": "exists"
+      "source": "eastmoney",
+      "rows": 389,
+      "problems": []
     },
     "open": {
       "ok": true,
-      "skipped": "exists"
+      "source": "eastmoney",
+      "rows": 24472,
+      "problems": []
     },
     "open_rank": {
       "ok": true,
-      "skipped": "exists"
+      "source": "eastmoney",
+      "rows": 20813,
+      "problems": []
     },
     "exchange_rank": {
       "ok": true,
-      "skipped": "exists"
+      "source": "eastmoney",
+      "rows": 1717,
+      "problems": []
     }
   },
-  "last_ok_date": "2026-11-26",
-  "updated": "2026-11-27T13:25:34+08:00"
+  "last_ok_date": "2026-11-27",
+  "updated": "2026-11-28T07:30:16+08:00"
 }
